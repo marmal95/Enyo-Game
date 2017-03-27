@@ -20,8 +20,8 @@ public:
 	MapGenerator(const uint32_t& x, const uint32_t& y, const std::string& seedStr, uint8_t steps = 5);
 	~MapGenerator();
 
-	uint32_t getX();
-	uint32_t getY();
+	uint32_t getX() const;
+	uint32_t getY() const;
 
 private:
 	void initialize();
