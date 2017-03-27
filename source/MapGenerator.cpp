@@ -28,10 +28,6 @@ MapGenerator::MapGenerator(const uint32_t & x, const uint32_t & y, const std::st
 	}
 }
 
-MapGenerator::~MapGenerator()
-{
-}
-
 /*
 * Return X size of map
 */
@@ -65,17 +61,20 @@ void MapGenerator::initialize()
 	}
 }
 
+/**
+* Makes smoother map
+*/
 void MapGenerator::doSimulation()
 {
 	std::vector<MapField> newMap(sizeX*sizeY);
 	uint32_t mapSize = sizeX;
+
 	auto nbh = [&newMap, mapSize](uint32_t x, uint32_t y)->MapField& {
 		return newMap[y*mapSize +x];
 	};
 
-
 	int aliveNbh;
-	for (uint32_t j = 0;j < sizeY; ++j)
+	for (uint32_t j = 0; j < sizeY; ++j)
 	{
 		for (uint32_t i = 0; i < sizeX; ++i)
 		{
@@ -96,9 +95,13 @@ void MapGenerator::doSimulation()
 			}
 		}
 	}
+
 	fields = newMap;
 }
 
+/**
+* Counts Entities around field
+*/
 int MapGenerator::countAlive(uint32_t x, uint32_t y)
 {
 	int alive = 0;
@@ -123,6 +126,12 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y)
 	return alive;
 }
 
+/**
+* Gets field.
+* @param x - x axis coordinate
+* @param y - y axis coordinate
+* @return field at [x,y] position
+*/
 MapField& MapGenerator::getField(uint32_t x, uint32_t y)
 {
 	return fields[y*sizeX + x];

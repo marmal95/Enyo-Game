@@ -51,7 +51,7 @@ public:
 
     float getDx() const;
 
-    float detDy() const;
+    float getDy() const;
 
     float getRadius() const;
 

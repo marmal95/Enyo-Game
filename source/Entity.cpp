@@ -60,11 +60,11 @@ void Entity::draw(sf::RenderWindow &window)
 //     DEBUG
 //     Displays Circle Around Object
 
-//    sf::CircleShape circle(this->radius);
-//    circle.setFillColor(sf::Color(255,0,0,170));
-//    circle.setPosition(this->x_pos,this->y_pos);
-//    circle.setOrigin(this->radius,this->radius);
-//    window.draw(circle);
+    sf::CircleShape circle(this->radius);
+    circle.setFillColor(sf::Color(255,0,0,170));
+    circle.setPosition(this->x_pos,this->y_pos);
+    circle.setOrigin(this->radius,this->radius);
+    window.draw(circle);
 }
 
 float Entity::getXPos() const
@@ -82,7 +82,7 @@ float Entity::getDx() const
     return dx;
 }
 
-float Entity::detDy() const
+float Entity::getDy() const
 {
     return dy;
 }

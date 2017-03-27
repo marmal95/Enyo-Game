@@ -81,8 +81,8 @@ void Game::initializeGame()
     mSoundHolder.load(ID::BulletBlueSound, "sounds/laser_blue.wav");
 
     createPlayer();
-    createAsteroids(15);
-    createSmallAsteroids(5);
+ //   createAsteroids(15);
+ //   createSmallAsteroids(5);
 
 	createOutline();
 
@@ -97,13 +97,13 @@ void Game::createOutline()
 {
 	for(int i = 0; i <= width/50; ++i)
 	{
-		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), i * 50, 0, 0, 50));
-		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), i * 50, 800, 0, 50));
+		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), i * 50, 0, 0, 25));
+		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), i * 50, 800, 0, 25));
 	}
 	for (int i = 0; i <= height / 50; ++i)
 	{
-		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), 0, i * 50, 0, 0));
-		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), 1200, i * 50, 0, 50));
+		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), 0, i * 50, 0, 25));
+		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), 1200, i * 50, 0, 25));
 	}
 }
 
@@ -281,8 +281,7 @@ void Game::checkCollisions()
                             std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockSmall), a->getXPos(), a->getYPos(), rand() % 360, 15));
                 }
             }
-
-            if (a->getName() == "Player" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()))
+			else if (a->getName() == "Player" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()))
             {
                 b->setLife(false);
                 entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip), a->getXPos(), a->getYPos()));
@@ -294,8 +293,7 @@ void Game::checkCollisions()
                 player()->setDx(0);
                 player()->setDy(0);
             }
-
-			if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+			else if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
 			{
 				entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip), a->getXPos(), a->getYPos()));
 
