@@ -35,7 +35,7 @@ MapGenerator::~MapGenerator()
 /*
 * Return X size of map
 */
-inline uint32_t MapGenerator::getX()
+inline uint32_t MapGenerator::getX() const
 {
 	return sizeX;
 }
