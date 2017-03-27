@@ -43,7 +43,7 @@ inline uint32_t MapGenerator::getX() const
 /*
 * Return Y size of map
 */
-inline uint32_t MapGenerator::getY()
+inline uint32_t MapGenerator::getY() const
 {
 	return sizeY;
 }

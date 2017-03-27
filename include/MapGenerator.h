@@ -21,7 +21,7 @@ public:
 	~MapGenerator();
 
 	uint32_t getX() const;
-	uint32_t getY();
+	uint32_t getY() const;
 
 private:
 	void initialize();
