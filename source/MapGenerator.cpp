@@ -29,7 +29,8 @@ MapGenerator::MapGenerator(const uint32_t & x, const uint32_t & y, const std::st
 }
 
 MapGenerator::~MapGenerator()
-{}
+{
+}
 
 /*
 * Return X size of map
@@ -42,7 +43,7 @@ inline uint32_t MapGenerator::getX() const
 /*
 * Return Y size of map
 */
-inline uint32_t MapGenerator::getY() const
+inline uint32_t MapGenerator::getY()
 {
 	return sizeY;
 }
@@ -111,7 +112,7 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y)
 			nbhY = y + j;
 			if (i == j && i == 0)
 				continue;
-			else if (nbhX < 0 || nbhX >= static_cast<int>(sizeX)|| nbhY < 0 || nbhY >= static_cast<int>(sizeY))
+			else if (nbhX < 0 || nbhX >= sizeX || nbhY < 0 || nbhY >= sizeY)
 				++alive;
 			else
 				if(getField(nbhX, nbhY) != MapField::Empty)
