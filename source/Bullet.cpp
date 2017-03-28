@@ -20,8 +20,8 @@ void Bullet::update()
 {
 	Entity::update();
 
-	mVelocity.x = static_cast<float>(cos(angle * M_PI/180.) * 18);
-	mVelocity.y = static_cast<float>(sin(angle * M_PI/180.) * 18);
+	mVelocity.x = static_cast<float>(cos(getRotation() * M_PI/180.) * 18);
+	mVelocity.y = static_cast<float>(sin(getRotation() * M_PI/180.) * 18);
     // angle+=rand()%6-3;
 	move(mVelocity);
 

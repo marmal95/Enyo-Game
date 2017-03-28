@@ -205,7 +205,7 @@ void Game::processEvents()
             {
                 entities.push_back(
                         std::make_unique<Bullet>(this, mAnimationHolder.getResource(ID::BulletBlue), sf::Vector2f(player()->getPosition().x,
-                                                 player()->getPosition().y), player()->getAngle(), 10));
+                                                 player()->getPosition().y), player()->getRotation(), 10));
                 qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BulletBlueSound)));
                 qSounds.back().play();
             }
@@ -244,8 +244,8 @@ void Game::render()
  */
 void Game::checkPlayerMove()
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) player()->addAngle(3);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) player()->subAngle(3);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) player()->rotate(3);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) player()->rotate(-3);
     player()->setMoving(sf::Keyboard::isKeyPressed(sf::Keyboard::Up));
 
     if (player()->isMoving())

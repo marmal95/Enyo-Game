@@ -26,8 +26,8 @@ void Player::update()
 
     if (moving)
     {
-        mVelocity.x += static_cast<float>(cos(angle * M_PI/180.) * 0.2);
-		mVelocity.y += static_cast<float>(sin(angle * M_PI/180.) * 0.2);
+        mVelocity.x += static_cast<float>(cos(getRotation() * M_PI/180.) * 0.2);
+		mVelocity.y += static_cast<float>(sin(getRotation() * M_PI/180.) * 0.2);
     } else
     {
 		mVelocity.x *= 0.99F;
