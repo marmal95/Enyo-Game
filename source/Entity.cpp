@@ -12,7 +12,7 @@
  * @param angle direction angle
  * @param radius object radius
  */
-Entity::Entity(const Game* window, const std::string &name, const Animation &animation, const sf::Vector2f& position, const float &angle,
+Entity::Entity(const World* window, const std::string &name, const Animation &animation, const sf::Vector2f& position, const float &angle,
                const float &radius)
         : mVelocity(0, 0), radius(radius), life(true), name(name), anim(animation), window(window)
 {

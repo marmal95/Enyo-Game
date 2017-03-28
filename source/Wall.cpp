@@ -1,6 +1,6 @@
 #include "Wall.h"
 
-Wall::Wall(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &sizeX)
+Wall::Wall(const World* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &sizeX)
 	: Entity(window, "Wall", animation, position, angle, sizeX)
 {
 }

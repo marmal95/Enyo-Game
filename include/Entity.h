@@ -1,17 +1,17 @@
+#pragma once
 
-#ifndef ENYO_ENTITY_H
-#define ENYO_ENTITY_H
+#include <SFML/Graphics/RenderTarget.hpp>
 
-#include "Animation.h"
 #include "SceneNode.h"
-
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/System/Vector2.hpp>
+#include "Animation.h"
 
 #include <string>
-#include <memory>
 
-class Game;
+#ifndef M_PI
+constexpr float M_PI = 3.141592F;
+#endif // !M_PI
+
+class World;
 
 class Entity : public SceneNode
 {
@@ -22,10 +22,10 @@ protected:
     std::string name;
     Animation anim;
 
-    const Game* window;
+    const World* window;
 
 public:
-    Entity(const Game* window, const std::string& name, const Animation& animation,
+    Entity(const World* window, const std::string& name, const Animation& animation,
           const sf::Vector2f& position, const float& angle = 0, const float& radius = 1);
     ~Entity();
 
@@ -43,5 +43,3 @@ public:
     void setAnimation(const Animation& animation);
     void setLife(bool life);
 };
-
-#endif //ENYO_ENTITY_H

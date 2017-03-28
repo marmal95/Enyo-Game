@@ -1,7 +1,7 @@
 
 #include "Entity.h"
 #include "Asteroid.h"
-#include "Game.h"
+#include "World.h"
 
 
 /**
@@ -12,7 +12,7 @@
  * @param angle direction angle
  * @param radius asteroid radius
  */
-Asteroid::Asteroid(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
+Asteroid::Asteroid(const World* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
         : Entity(window, "Asteroid", animation, position, angle, radius)
 {
     mVelocity.x = static_cast<float>(rand() % 8 - 4);
@@ -30,8 +30,8 @@ void Asteroid::update()
 	anim.setSpriteRot(getRotation());
 	move(mVelocity);
 
-	if (getPosition().x > window->getWidth()) setPosition(0, getPosition().y);
-	if (getPosition().x < 0.F) setPosition(window->getWidth(), getPosition().y);
-	if (getPosition().y > window->getHeight()) setPosition(getPosition().x, 0);
-	if (getPosition().y < 0.F) setPosition(getPosition().x, window->getHeight());
+	if (getPosition().x > window->getDimension().x) setPosition(0, getPosition().y);
+	if (getPosition().x < 0.F) setPosition(window->getDimension().x, getPosition().y);
+	if (getPosition().y > window->getDimension().y) setPosition(getPosition().x, 0);
+	if (getPosition().y < 0.F) setPosition(getPosition().x, window->getDimension().y);
 }

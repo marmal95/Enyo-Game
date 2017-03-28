@@ -7,7 +7,7 @@
 class Asteroid : public Entity
 {
 public:
-    Asteroid(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle = 0, const float &radius = 1);
+    Asteroid(const World* window, const Animation &animation, const sf::Vector2f& position, const float &angle = 0, const float &radius = 1);
     void update() override;
 };
 

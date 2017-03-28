@@ -13,7 +13,7 @@
  * @param angle direction angle
  * @param radius player radius
  */
-Player::Player(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
+Player::Player(const World* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
         : Entity(window, "Player", animation, position, angle, radius)
 {}
 
@@ -47,10 +47,10 @@ void Player::update()
 
 	move(mVelocity);
 
-    if (getPosition().x > window->getWidth()) setPosition(0, getPosition().y);
-	if (getPosition().x < 0.F) setPosition(window->getWidth(), getPosition().y);
-	if (getPosition().y > window->getHeight()) setPosition(getPosition().x, 0);
-    if (getPosition().y < 0.F) setPosition(getPosition().x, window->getHeight());
+    if (getPosition().x > window->getDimension().x) setPosition(0, getPosition().y);
+	if (getPosition().x < 0.F) setPosition(window->getDimension().x, getPosition().y);
+	if (getPosition().y > window->getDimension().y) setPosition(getPosition().x, 0);
+    if (getPosition().y < 0.F) setPosition(getPosition().x, window->getDimension().y);
 }
 
 bool Player::isMoving() const

@@ -9,7 +9,7 @@
  * @param angle direction move angle
  * @param radius bullet radius
  */
-Bullet::Bullet(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
+Bullet::Bullet(const World* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
         : Entity(window, "Bullet", animation, position, angle, radius)
 {}
 
@@ -25,6 +25,6 @@ void Bullet::update()
     // angle+=rand()%6-3;
 	move(mVelocity);
 
-    if (getPosition().x > window->getWidth() || getPosition().x < 0 || getPosition().y > window->getHeight() || getPosition().y < 0)
+    if (getPosition().x > window->getDimension().x || getPosition().x < 0 || getPosition().y > window->getDimension().y || getPosition().y < 0)
         life = 0;
 }
