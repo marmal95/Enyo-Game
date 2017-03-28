@@ -7,7 +7,7 @@
  * Initializes Entity Object.
  */
 Entity::Entity()
-        : x_pos(0), y_pos(0), dx(0), dy(0), radius(0), angle(0), life(true), name(""), anim()
+        : mVelocity(0, 0), radius(0), angle(0), life(true), name(""), anim()
 {}
 
 /**
@@ -19,10 +19,12 @@ Entity::Entity()
  * @param angle direction angle
  * @param radius object radius
  */
-Entity::Entity(const Game* window, const std::string &name, const Animation &animation, const int &x, const int &y, const float &angle,
+Entity::Entity(const Game* window, const std::string &name, const Animation &animation, const sf::Vector2f& position, const float &angle,
                const float &radius)
-        : x_pos(static_cast<float>(x)), y_pos(static_cast<float>(y)), dx(0.F), dy(0.F), radius(radius), angle(angle), life(true), name(name), anim(animation), window(window)
-{}
+        : mVelocity(0, 0), radius(radius), angle(angle), life(true), name(name), anim(animation), window(window)
+{
+	setPosition(position);
+}
 
 /**
  * Destructs Entity Object.
@@ -30,61 +32,15 @@ Entity::Entity(const Game* window, const std::string &name, const Animation &ani
 Entity::~Entity()
 {}
 
-/**
- * Set Entity Object Data.
- * @param animation object animation
- * @param x x - axis position
- * @param y y - axis position
- * @param angle direction angle
- * @param radius object radius
- */
-void Entity::setData(const Animation &animation, const int &x, const int &y, const float &angle, const float &radius)
+void Entity::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-    this->x_pos = static_cast<float>(x);
-    this->y_pos = static_cast<float>(y);
-    this->angle = angle;
-    this->radius = radius;
-    this->anim = anim;
+	target.draw(anim.getSprite());
 }
 
-/**
- * Draws Object on Screen.
- * @param window game window
- */
-void Entity::draw(sf::RenderWindow &window)
+void Entity::update()
 {
-    this->anim.setSpritePos(this->x_pos,this->y_pos);
-    this->anim.setSpriteRot(this->angle+90);
-    window.draw(this->anim.getSprite());
-
-//     DEBUG
-//     Displays Circle Around Object
-
-    sf::CircleShape circle(this->radius);
-    circle.setFillColor(sf::Color(255,0,0,170));
-    circle.setPosition(this->x_pos,this->y_pos);
-    circle.setOrigin(this->radius,this->radius);
-    window.draw(circle);
-}
-
-float Entity::getXPos() const
-{
-    return x_pos;
-}
-
-float Entity::getYPos() const
-{
-    return y_pos;
-}
-
-float Entity::getDx() const
-{
-    return dx;
-}
-
-float Entity::getDy() const
-{
-    return dy;
+	this->anim.setSpritePos(getPosition().x, getPosition().y);
+	this->anim.setSpriteRot(this->angle + 90);
 }
 
 float Entity::getRadius() const
@@ -132,12 +88,34 @@ void Entity::setLife(bool life)
     this->life = life;
 }
 
-void Entity::setDx(float dx)
+//void Entity::setPosition(const sf::Vector2f & position)
+//{
+//	mPosition = position;
+//}
+//
+//void Entity::setPosition(float x, float y)
+//{
+//	mPosition.x = x;
+//	mPosition.y = y;
+//}
+//
+//sf::Vector2f Entity::getPosition() const
+//{
+//	return mPosition;
+//}
+
+void Entity::setVelocity(const sf::Vector2f & velocity)
 {
-    this->dx = dx;
+	mVelocity = velocity;
 }
 
-void Entity::setDy(float dy)
+void Entity::setVolocity(float dx, float dy)
 {
-    this->dy = dy;
+	mVelocity.x = dx;
+	mVelocity.y = dy;
+}
+
+sf::Vector2f Entity::getVolocity() const
+{
+	return mVelocity;
 }

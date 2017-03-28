@@ -18,12 +18,12 @@ Animation::Animation()
  * @param count number of frames in texture
  * @param speed animation speed
  */
-Animation::Animation(const sf::Texture &t, const int &x, const int &y,
+Animation::Animation(const sf::Texture &t, const sf::Vector2f& position,
                      const int &w, const int &h, const int &count, const float &speed)
     : frame(0), speed(speed)
 {
     for(int i = 0; i < count; ++i)
-        frames.push_back(sf::IntRect(x+i*w, y, w, h));
+        frames.push_back(sf::IntRect(position.x + i * w, position.y, w, h));
 
     sprite.setTexture(t);
     sprite.setOrigin(static_cast<float>(w/2), static_cast<float>(h/2));
@@ -44,7 +44,7 @@ void Animation::setSpriteRot(const float& rot)
     sprite.setRotation(rot);
 }
 
-sf::Sprite& Animation::getSprite()
+const sf::Sprite& Animation::getSprite() const
 {
     return sprite;
 }

@@ -3,24 +3,20 @@
 #define ENYO_ENTITY_H
 
 #include "Animation.h"
+#include "SceneNode.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Vector2.hpp>
 
 #include <string>
 #include <memory>
 
 class Game;
 
-/**
- * Entity Abstract Class.
- */
-class Entity
+class Entity : public SceneNode
 {
 protected:
-    float x_pos;
-    float y_pos;
-    float dx;
-    float dy;
+	sf::Vector2f mVelocity;
     float radius;
     float angle;
     bool life;
@@ -31,49 +27,32 @@ protected:
 
 public:
     Entity();
-
     Entity(const Game* window, const std::string& name, const Animation& animation,
-           const int& x, const int& y, const float& angle = 0, const float& radius = 1);
-
+          const sf::Vector2f& position, const float& angle = 0, const float& radius = 1);
     ~Entity();
 
-    virtual void update() = 0;
-
-    void setData(const Animation& animation, const int& x, const int& y,
-                 const float& angle = 0, const float& radius = 1);
-
-    void draw(sf::RenderWindow& window);
-
-
-    float getXPos() const;
-
-    float getYPos() const;
-
-    float getDx() const;
-
-    float getDy() const;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void update() override;
 
     float getRadius() const;
-
     float getAngle() const;
-
     bool getLife() const;
-
     Animation& getAnimation();
-
     const std::string& getName() const;
-
     void setAnimation(const Animation& animation);
-
     void addAngle(float value);
-
     void subAngle(float value);
-
     void setLife(bool life);
 
-    void setDx(float dx);
+	//void setPosition(const sf::Vector2f& position);
+	//void setPosition(float x, float y);
+	//sf::Vector2f getPosition() const;
 
-    void setDy(float dy);
+	void setVelocity(const sf::Vector2f& velocity);
+	void setVolocity(float dx, float dy);
+	sf::Vector2f getVolocity() const;
+
+
 };
 
 #endif //ENYO_ENTITY_H

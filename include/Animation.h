@@ -14,12 +14,12 @@ private: // TODO: private
 
 public:
     Animation();
-    Animation(const sf::Texture &t, const int &x, const int &y,
+    Animation(const sf::Texture &t, const sf::Vector2f& position,
               const int &w, const int &h, const int &count, const float &speed);
     ~Animation();
     void setSpritePos(const float& x_pos, const float& y_pos);
     void setSpriteRot(const float& rot);
-    sf::Sprite& getSprite() ;
+	const sf::Sprite& getSprite() const;
 
     void update();
     bool finished();

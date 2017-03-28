@@ -9,8 +9,8 @@
  * @param angle direction move angle
  * @param radius bullet radius
  */
-Bullet::Bullet(const Game* window, const Animation &animation, const int &x, const int &y, const float &angle, const float &radius)
-        : Entity(window, "Bullet", animation, x, y, angle, radius)
+Bullet::Bullet(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
+        : Entity(window, "Bullet", animation, position, angle, radius)
 {}
 
 /**
@@ -18,12 +18,13 @@ Bullet::Bullet(const Game* window, const Animation &animation, const int &x, con
  */
 void Bullet::update()
 {
-    dx = static_cast<float>(cos(angle * M_PI/180.) * 18);
-    dy = static_cast<float>(sin(angle * M_PI/180.) * 18);
-    // angle+=rand()%6-3;
-    x_pos += dx;
-    y_pos += dy;
+	Entity::update();
 
-    if (x_pos > window->getWidth() || x_pos < 0 || y_pos > window->getHeight() || y_pos < 0)
+	mVelocity.x = static_cast<float>(cos(angle * M_PI/180.) * 18);
+	mVelocity.y = static_cast<float>(sin(angle * M_PI/180.) * 18);
+    // angle+=rand()%6-3;
+	move(mVelocity);
+
+    if (getPosition().x > window->getWidth() || getPosition().x < 0 || getPosition().y > window->getHeight() || getPosition().y < 0)
         life = 0;
 }

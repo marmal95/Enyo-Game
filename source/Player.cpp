@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "Game.h"
 
+#include <iostream>
+
 /**
  * Initializes Player Data
  * @param animation player animation
@@ -11,8 +13,8 @@
  * @param angle direction angle
  * @param radius player radius
  */
-Player::Player(const Game* window, const Animation &animation, const int &x, const int &y, const float &angle, const float &radius)
-        : Entity(window, "Player", animation, x, y, angle, radius)
+Player::Player(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
+        : Entity(window, "Player", animation, position, angle, radius)
 {}
 
 /**
@@ -20,34 +22,36 @@ Player::Player(const Game* window, const Animation &animation, const int &x, con
  */
 void Player::update()
 {
+	Entity::update();
+
+	this->rotate(5);
     if (moving)
     {
-        dx += static_cast<float>(cos(angle * M_PI/180.) * 0.2);
-        dy += static_cast<float>(sin(angle * M_PI/180.) * 0.2);
+        mVelocity.x += static_cast<float>(cos(angle * M_PI/180.) * 0.2);
+		mVelocity.y += static_cast<float>(sin(angle * M_PI/180.) * 0.2);
     } else
     {
-        dx *= 0.99F;
-        dy *= 0.99F;
+		mVelocity.x *= 0.99F;
+		mVelocity.y *= 0.99F;
     }
 
     // TODO: Set max speed to entity
     // TODO: And allow entities to have acceleration
     int maxSpeed = 15;
-    float speed = static_cast<float>(sqrt(dx * dx + dy * dy));
+    float speed = static_cast<float>(sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y));
 
     if (speed > maxSpeed)
     {
-        dx *= maxSpeed / speed;
-        dy *= maxSpeed / speed;
+		mVelocity.x *= maxSpeed / speed;
+		mVelocity.y *= maxSpeed / speed;
     }
 
-    x_pos += dx;
-    y_pos += dy;
+	move(mVelocity);
 
-    if (x_pos > window->getWidth()) x_pos = 0.F;
-    if (x_pos < 0.F) x_pos = static_cast<float>(window->getWidth());
-    if (y_pos > window->getHeight()) y_pos = 0.F;
-    if (y_pos < 0.F) y_pos = static_cast<float>(window->getHeight());
+    if (getPosition().x > window->getWidth()) setPosition(0, getPosition().y);
+	if (getPosition().x < 0.F) setPosition(window->getWidth(), getPosition().y);
+	if (getPosition().y > window->getHeight()) setPosition(getPosition().x, 0);
+    if (getPosition().y < 0.F) setPosition(getPosition().x, window->getHeight());
 }
 
 bool Player::isMoving() const

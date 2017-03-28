@@ -1,9 +1,11 @@
 #include "Wall.h"
 
-Wall::Wall(const Game* window, const Animation &animation, const int &x, const int &y, const float &angle, const float &sizeX)
-	: Entity(window, "Wall", animation, x, y, angle, sizeX)
+Wall::Wall(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &sizeX)
+	: Entity(window, "Wall", animation, position, angle, sizeX)
 {
 }
 
 void Wall::update()
-{}
+{
+	Entity::update();
+}

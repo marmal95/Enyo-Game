@@ -67,24 +67,24 @@ void Game::initializeGame()
 
     sBackground.setTexture(mTextureHolder.getResource(ID::SpaceBackground));
 
-    mAnimationHolder.load(ID::Explosion, std::make_unique<Animation>(mTextureHolder.getResource(ID::Explosion), 0, 0, 256, 256, 48, 0.5));
-    mAnimationHolder.load(ID::RockBig, std::make_unique<Animation>(mTextureHolder.getResource(ID::RockBig), 0, 0, 64, 64, 16, 0.2));
-    mAnimationHolder.load(ID::RockSmall, std::make_unique<Animation>(mTextureHolder.getResource(ID::RockSmall), 0, 0, 64, 64, 16, 0.2));
-    mAnimationHolder.load(ID::BulletBlue, std::make_unique<Animation>(mTextureHolder.getResource(ID::BulletBlue), 0, 0, 32, 64, 16, 0.8));
-    mAnimationHolder.load(ID::Spaceship, std::make_unique<Animation>(mTextureHolder.getResource(ID::Spaceship), 40, 0, 40, 40, 1, 0));
-    mAnimationHolder.load(ID::SpaceshipFly, std::make_unique<Animation>(mTextureHolder.getResource(ID::SpaceshipFly), 40, 40, 40, 40, 1, 0));
-    mAnimationHolder.load(ID::ExplosionShip, std::make_unique<Animation>(mTextureHolder.getResource(ID::ExplosionShip), 0, 0, 192, 192, 64, 0.5));
-	mAnimationHolder.load(ID::Wall, std::make_unique<Animation>(mTextureHolder.getResource(ID::Wall), 0, 0, 50, 50, 1, 0));
+    mAnimationHolder.load(ID::Explosion, std::make_unique<Animation>(mTextureHolder.getResource(ID::Explosion), sf::Vector2f(0, 0), 256, 256, 48, 0.5));
+    mAnimationHolder.load(ID::RockBig, std::make_unique<Animation>(mTextureHolder.getResource(ID::RockBig), sf::Vector2f(0, 0), 64, 64, 16, 0.2));
+    mAnimationHolder.load(ID::RockSmall, std::make_unique<Animation>(mTextureHolder.getResource(ID::RockSmall), sf::Vector2f(0, 0), 64, 64, 16, 0.2));
+    mAnimationHolder.load(ID::BulletBlue, std::make_unique<Animation>(mTextureHolder.getResource(ID::BulletBlue), sf::Vector2f(0, 0), 32, 64, 16, 0.8));
+    mAnimationHolder.load(ID::Spaceship, std::make_unique<Animation>(mTextureHolder.getResource(ID::Spaceship), sf::Vector2f(40, 0), 40, 40, 1, 0));
+    mAnimationHolder.load(ID::SpaceshipFly, std::make_unique<Animation>(mTextureHolder.getResource(ID::SpaceshipFly), sf::Vector2f(40, 40), 40, 40, 1, 0));
+    mAnimationHolder.load(ID::ExplosionShip, std::make_unique<Animation>(mTextureHolder.getResource(ID::ExplosionShip), sf::Vector2f(0, 0), 192, 192, 64, 0.5));
+	mAnimationHolder.load(ID::Wall, std::make_unique<Animation>(mTextureHolder.getResource(ID::Wall), sf::Vector2f(0, 0), 50, 50, 1, 0));
 
     mSoundHolder.load(ID::BigExplosionSound, "sounds/explosion_big.wav");
     mSoundHolder.load(ID::SmallExplosionSound, "sounds/explosion_small.wav");
     mSoundHolder.load(ID::BulletBlueSound, "sounds/laser_blue.wav");
 
     createPlayer();
- //   createAsteroids(15);
- //   createSmallAsteroids(5);
+    createAsteroids(5);
+   // createSmallAsteroids(5);
 
-	createOutline();
+	//createOutline();
 
     run();
 }
@@ -97,13 +97,13 @@ void Game::createOutline()
 {
 	for(int i = 0; i <= width/50; ++i)
 	{
-		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), i * 50, 0, 0, 25));
-		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), i * 50, 800, 0, 25));
+		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), sf::Vector2f(i * 50, 0), 0, 25));
+		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), sf::Vector2f(i*50, 800), 0, 25));
 	}
 	for (int i = 0; i <= height / 50; ++i)
 	{
-		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), 0, i * 50, 0, 25));
-		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), 1200, i * 50, 0, 25));
+		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), sf::Vector2f(0, i*50), 0, 25));
+		entities.push_back(std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall), sf::Vector2f(1200, i*50), 0, 25));
 	}
 }
 
@@ -112,7 +112,7 @@ void Game::createOutline()
  */
 void Game::createPlayer()
 {
-    auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), 200, 200, 0, 20);
+    auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), sf::Vector2f(200, 200), 0, 20);
     entities.push_back(std::move(player));
 }
 
@@ -125,7 +125,8 @@ void Game::createAsteroids(const uint32_t& count)
     for (uint32_t i = 0; i < count; ++i)
     {
         entities.push_back(
-                std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockBig), rand() % width, rand() % height, rand() % 360, 25));
+                std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockBig),
+					sf::Vector2f(rand() % width, rand() % height), rand() % 360, 25));
     }
 }
 
@@ -138,7 +139,8 @@ void Game::createSmallAsteroids(const uint32_t& count)
 {
     for (uint32_t i = 0; i < count; ++i)
         entities.push_back(
-                std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockSmall), rand() % width, rand() % height, rand() % 360, 15));
+                std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockSmall),
+					sf::Vector2f(rand() % width, rand() % height), rand() % 360, 15));
 }
 
 /**
@@ -151,8 +153,8 @@ bool Game::isCollide(const Entity* const a, const Entity* const b)
 {
 	if (a->getName() == "Wall")
 	{
-		float circleDistX = abs(b->getXPos() - a->getXPos());
-		float circleDistY = abs(b->getYPos() - a->getYPos());
+		float circleDistX = abs(b->getPosition().x - a->getPosition().x);
+		float circleDistY = abs(b->getPosition().y - a->getPosition().y);
 		
 		if(circleDistX > (a->getRadius()/2 + b->getRadius()))
 			return false;
@@ -169,8 +171,8 @@ bool Game::isCollide(const Entity* const a, const Entity* const b)
 		return (cornerDistance <= b->getRadius()*b->getRadius());
 	}
 	else
-		return (b->getXPos() - a->getXPos()) * (b->getXPos() - a->getXPos()) +
-			   (b->getYPos() - a->getYPos()) * (b->getYPos() - a->getYPos()) <
+		return (b->getPosition().x - a->getPosition().x) * (b->getPosition().x - a->getPosition().x) +
+			   (b->getPosition().y - a->getPosition().y) * (b->getPosition().y - a->getPosition().y) <
 			   (a->getRadius() + b->getRadius()) * (a->getRadius() + b->getRadius());
 }
 
@@ -202,8 +204,8 @@ void Game::processEvents()
             if (event.key.code == sf::Keyboard::Space)
             {
                 entities.push_back(
-                        std::make_unique<Bullet>(this, mAnimationHolder.getResource(ID::BulletBlue), player()->getXPos(),
-                                                 player()->getYPos(), player()->getAngle(), 10));
+                        std::make_unique<Bullet>(this, mAnimationHolder.getResource(ID::BulletBlue), sf::Vector2f(player()->getPosition().x,
+                                                 player()->getPosition().y), player()->getAngle(), 10));
                 qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BulletBlueSound)));
                 qSounds.back().play();
             }
@@ -229,8 +231,8 @@ void Game::render()
     app.clear();
 
     app.draw(sBackground);
-    for (const auto& i:entities)
-        i->draw(app);
+	for (const auto& i : entities)
+		app.draw(*i);
 
     app.display();
 }
@@ -271,38 +273,40 @@ void Game::checkCollisions()
                     qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::SmallExplosionSound)));
                 qSounds.back().play();
 
-                entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::Explosion), a->getXPos(), a->getYPos()));
+                entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::Explosion),
+					sf::Vector2f(a->getPosition().x, a->getPosition().y)));
 
                 for (int i = 0; i < 2; i++)
                 {
                     if (a->getRadius() == 15)
                         break;
                     entities.push_back(
-                            std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockSmall), a->getXPos(), a->getYPos(), rand() % 360, 15));
+                            std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockSmall),
+								sf::Vector2f(a->getPosition().x, a->getPosition().y), rand() % 360, 15));
                 }
             }
 			else if (a->getName() == "Player" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()))
             {
                 b->setLife(false);
-                entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip), a->getXPos(), a->getYPos()));
+                entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip),
+					sf::Vector2f(a->getPosition().x, a->getPosition().y)));
 
                 qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
                 qSounds.back().play();
 
-                player()->setData(mAnimationHolder.getResource(ID::Spaceship), width / 2, height / 2, 0, 20);
-                player()->setDx(0);
-                player()->setDy(0);
+				player()->setPosition(200, 200);
+				player()->setVolocity(0, 0);
             }
 			else if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
 			{
-				entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip), a->getXPos(), a->getYPos()));
+				entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip),
+					sf::Vector2f(a->getPosition().x, a->getPosition().y)));
 
 				qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
 				qSounds.back().play();
 
-				player()->setData(mAnimationHolder.getResource(ID::Spaceship), width / 2, height / 2, 0, 20);
-				player()->setDx(0);
-				player()->setDy(0);
+				player()->setPosition(200, 200);
+				player()->setVolocity(0, 0);
 			}
         }
     }

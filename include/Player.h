@@ -10,7 +10,7 @@ private:
     bool moving;
 
 public:
-    Player(const Game* window, const Animation &animation, const int &x, const int &y, const float &angle = 0, const float &radius = 1);
+    Player(const Game* window, const Animation &animation, const sf::Vector2f& position, const float &angle = 0, const float &radius = 1);
     void update() override;
     bool isMoving() const;
     void setMoving(bool moving);
