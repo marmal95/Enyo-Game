@@ -16,6 +16,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/Sound.hpp>
+#include <SFML/Graphics/View.hpp>
 
 #include <list>
 #include <memory>
@@ -46,6 +47,9 @@ private:
 
     // Entities List
     std::list<std::unique_ptr<Entity>> entities;
+
+	// View
+	sf::View view;
 
 private:
     void showMenu();

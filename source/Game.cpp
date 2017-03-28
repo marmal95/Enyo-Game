@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-// TODO: Pozycje -> Vector2f ??
+
 
 /**
  * Initializes Game Window
@@ -18,10 +18,10 @@
  * @param h width height
  */
 Game::Game(const uint32_t& w, const uint32_t& h)
-        :
-        width(w), height(h), app(sf::VideoMode(w, h), "The Enyo Game"),
-        mTextureHolder(), mAnimationHolder(), mSoundHolder(),
-        sBackground(), qSounds(), entities()
+	:
+	width(w), height(h), app(sf::VideoMode(w, h), "The Enyo Game"),
+	mTextureHolder(), mAnimationHolder(), mSoundHolder(),
+	sBackground(), qSounds(), entities()//, view(sf::Vector2f(600, 400), sf::Vector2f(600, 600))
 {
     app.setFramerateLimit(60);
 
@@ -230,7 +230,9 @@ void Game::render()
 {
     app.clear();
 
-    app.draw(sBackground);
+	//view.setCenter(player()->getPosition());
+	//app.setView(view);
+	app.draw(sBackground);
 	for (const auto& i : entities)
 		app.draw(*i);
 

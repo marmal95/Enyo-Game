@@ -6,7 +6,7 @@
 
 class Animation
 {
-private: // TODO: private
+private:
     float frame;
     float speed;
     sf::Sprite sprite;
@@ -19,6 +19,7 @@ public:
     ~Animation();
     void setSpritePos(const float& x_pos, const float& y_pos);
     void setSpriteRot(const float& rot);
+
 	const sf::Sprite& getSprite() const;
 
     void update();

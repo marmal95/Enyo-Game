@@ -55,13 +55,13 @@ const sf::Sprite& Animation::getSprite() const
 void Animation::update()
 {
     frame += speed;
-    if(frame > 0 && frame < frames.size())
-        sprite.setTextureRect(frames[static_cast<uint32_t>(frame)]);
-//    u_long n = frames.size();
-//    if(frame >= n)
-//        frame -= n;
-//    if(n > 0)
-//        sprite.setTextureRect(frames[frame]);
+    //if(frame > 0 && frame < frames.size())
+    //    sprite.setTextureRect(frames[static_cast<uint32_t>(frame)]);
+    size_t n = frames.size();
+    if(frame >= n)
+        frame -= n;
+    if(n > 0)
+        sprite.setTextureRect(frames[frame]);
 }
 
 /**

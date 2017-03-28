@@ -1,6 +1,7 @@
 
 #include "Entity.h"
 #include "Asteroid.h"
+#include "Game.h"
 
 
 /**
@@ -25,10 +26,12 @@ void Asteroid::update()
 {
 	Entity::update();
 
+	rotate(3);
+	anim.setSpriteRot(getRotation());
 	move(mVelocity);
 
-	if (getPosition().x > 1200.F) setPosition(0, getPosition().y);
-    if (getPosition().x < 0.F) setPosition(1200, getPosition().y);
-    if (getPosition().y > 800.F) setPosition(getPosition().x, 0);
-    if (getPosition().y < 0.F) setPosition(getPosition().x, 800);
+	if (getPosition().x > window->getWidth()) setPosition(0, getPosition().y);
+	if (getPosition().x < 0.F) setPosition(window->getWidth(), getPosition().y);
+	if (getPosition().y > window->getHeight()) setPosition(getPosition().x, 0);
+	if (getPosition().y < 0.F) setPosition(getPosition().x, window->getHeight());
 }
