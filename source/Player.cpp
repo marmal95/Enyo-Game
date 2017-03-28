@@ -24,7 +24,6 @@ void Player::update()
 {
 	Entity::update();
 
-	this->rotate(5);
     if (moving)
     {
         mVelocity.x += static_cast<float>(cos(angle * M_PI/180.) * 0.2);
