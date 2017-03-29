@@ -6,10 +6,9 @@
 
 int main()
 {
-    Game game(1200, 800);
-  //  game.startGame();
-
-	//MapGenerator map(100,10,"lool",1);
+	srand(time(0));
+    Game game(1920, 1200);
+    game.run();
 
     return 0;
 }
