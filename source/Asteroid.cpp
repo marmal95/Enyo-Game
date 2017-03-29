@@ -30,8 +30,14 @@ void Asteroid::update()
 	anim.setSpriteRot(getRotation());
 	move(mVelocity);
 
-	if (getPosition().x > window->getDimension().x) setPosition(0, getPosition().y);
-	if (getPosition().x < 0.F) setPosition(window->getDimension().x, getPosition().y);
-	if (getPosition().y > window->getDimension().y) setPosition(getPosition().x, 0);
-	if (getPosition().y < 0.F) setPosition(getPosition().x, window->getDimension().y);
+	//if (getPosition().x > window->getDimension().x) setPosition(0, getPosition().y);
+	//if (getPosition().x < 0.F) setPosition(window->getDimension().x, getPosition().y);
+	//if (getPosition().y > window->getDimension().y) setPosition(getPosition().x, 0);
+	//if (getPosition().y < 0.F) setPosition(getPosition().x, window->getDimension().y);
+
+	// Debud¿
+	if (getPosition().y < 0 || getPosition().y >= window->getDimension().y)
+		mVelocity.y = -mVelocity.y;
+	if (getPosition().x < 0 || getPosition().x >= window->getDimension().x)
+		mVelocity.x = -mVelocity.x;
 }

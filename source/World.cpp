@@ -46,8 +46,8 @@ void World::update()
 
 void World::draw()
 {
-	//view.setCenter(player()->getPosition());
-	//app.setView(view);
+	mWorldView.setCenter(playerAircraft->getPosition());
+	mWindow.setView(mWorldView);
 
 	// Draw Background
 	mWindow.draw(sBackground);
