@@ -39,7 +39,7 @@ void World::processEvents()
 			{
 				entities.push_back(
 					std::make_unique<Bullet>(this, mAnimationHolder.getResource(ID::BulletBlue), sf::Vector2f(playerAircraft->getPosition().x,
-						playerAircraft->getPosition().y), playerAircraft->getRotation(), 10.F));
+						playerAircraft->getPosition().y), playerAircraft->getRotation(), 10));
 				qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BulletBlueSound)));
 				qSounds.back().play();
 			}
@@ -117,7 +117,7 @@ void World::buildScene()
 
 void World::createPlayer()
 {
-	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), sf::Vector2f(200.F, 200.F), 0.F, 20.F);
+	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), sf::Vector2f(200, 200), 0, 20);
 	playerAircraft = player.get();
 	entities.push_back(std::move(player));
 }
@@ -127,10 +127,7 @@ void World::createAsteroids(const uint32_t & count)
 	for (uint32_t i = 0; i < count; ++i)
 		entities.push_back(
 			std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockBig),
-				sf::Vector2f(
-					static_cast<float>(rand() % worldDimension.x),
-					static_cast<float>(rand() % worldDimension.y)),
-					static_cast<float>(rand() % 360), 25.F));
+				sf::Vector2f(rand() % worldDimension.x, rand() % worldDimension.y), rand() % 360, 25));
 }
 
 void World::createSmallAsteroids(const uint32_t & count)
@@ -138,10 +135,7 @@ void World::createSmallAsteroids(const uint32_t & count)
 	for (uint32_t i = 0; i < count; ++i)
 		entities.push_back(
 			std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockSmall),
-				sf::Vector2f(
-					static_cast<float>(rand() % worldDimension.x),
-					static_cast<float>(rand() % worldDimension.y)),
-					static_cast<float>(rand() % 360), 15.F));
+				sf::Vector2f(rand() % worldDimension.x, rand() % worldDimension.y), rand() % 360, 15));
 }
 
 
