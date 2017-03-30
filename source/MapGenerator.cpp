@@ -18,9 +18,9 @@ MapGenerator::MapGenerator(const uint32_t & x, const uint32_t & y, const std::st
 		doSimulation();
 
 
-	for (int j = 0;j < y; ++j)
+	for (uint32_t j = 0;j < y; ++j)
 	{
-		for (int i = 0; i < x; ++i)
+		for (uint32_t i = 0; i < x; ++i)
 		{
 			std::cout << static_cast<uint8_t>(fields[j*x+i]);
 		}
@@ -115,7 +115,7 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y)
 			nbhY = y + j;
 			if (i == j && i == 0)
 				continue;
-			else if (nbhX < 0 || nbhX >= sizeX || nbhY < 0 || nbhY >= sizeY)
+			else if (nbhX < 0 || nbhX >= static_cast<int>(sizeX) || nbhY < 0 || nbhY >= static_cast<int>(sizeY))
 				++alive;
 			else
 				if(getField(nbhX, nbhY) != MapField::Empty)

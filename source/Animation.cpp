@@ -23,7 +23,9 @@ Animation::Animation(const sf::Texture &t, const sf::Vector2f& position,
     : frame(0), speed(speed)
 {
     for(int i = 0; i < count; ++i)
-        frames.push_back(sf::IntRect(position.x + i * w, position.y, w, h));
+        frames.push_back(sf::IntRect(
+			static_cast<int>(position.x + i * w),
+			static_cast<int>(position.y), w, h));
 
     sprite.setTexture(t);
     sprite.setOrigin(static_cast<float>(w/2), static_cast<float>(h/2));
@@ -61,7 +63,7 @@ void Animation::update()
     if(frame >= n)
         frame -= n;
     if(n > 0)
-        sprite.setTextureRect(frames[frame]);
+		sprite.setTextureRect(frames[static_cast<uint32_t>(frame)]);
 }
 
 /**
