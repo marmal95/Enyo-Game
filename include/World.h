@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Entity.h"
 #include "Player.h"
+#include "MapGenerator.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Audio/Sound.hpp>
@@ -17,6 +18,9 @@ private:
 	sf::Vector2i worldDimension;
 	sf::RenderWindow& mWindow;
 	sf::View mWorldView;
+
+	//Map generator
+	MapGenerator generator;
 
 	// Texture Holder
 	ResourceHolder<sf::Texture, ID> mTextureHolder;

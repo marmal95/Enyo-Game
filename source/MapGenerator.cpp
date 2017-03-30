@@ -2,6 +2,7 @@
 
 #include <random>
 #include <iostream>
+#include "Wall.h"
 
 /**
  * Creates map generator with params
