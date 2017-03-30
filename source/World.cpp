@@ -2,6 +2,7 @@
 #include "Asteroid.h"
 #include "Explosion.h"
 #include "Bullet.h"
+#include "Wall.h"
 
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Audio/Sound.hpp>
@@ -10,10 +11,19 @@
 World::World(sf::RenderWindow & window, const sf::Vector2i& dimension)
 	: worldDimension(dimension), mWindow(window), mWorldView(window.getDefaultView()),
 	mTextureHolder(), mAnimationHolder(), mSoundHolder(),
-	qSounds(), entities(), sBackground()
+	qSounds(), entities(), sBackground(),
+	generator(39,24,"z",1)
 {
 	initializeWold();
 	buildScene();
+
+	//first draw
+	for(int i = 0; i < 24; ++i)
+		for(int j = 0; j < 39; ++j)
+			if(generator.getField(j,i) == MapField::Wall)
+				entities.push_back(
+					std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall),
+						sf::Vector2f(j*50, i*50), 0, 25));
 }
 
 void World::processEvents()
@@ -199,6 +209,14 @@ void World::checkCollisions()
 
 				playerAircraft->setPosition(200, 200);
 				playerAircraft->setVolocity(0, 0);
+			}
+			else if (a->getName() == "Asteroid" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+			{
+				a->setVolocity(a->getVolocity().x*-1, a->getVolocity().y*-1);
+			}
+			else if (a->getName() == "Bullet" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+			{
+				a->setLife(false);
 			}
 		}
 	}
