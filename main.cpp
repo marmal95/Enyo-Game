@@ -6,7 +6,9 @@
 
 int main()
 {
-	//srand(time(0));
+	// For Debug
+	srand(unsigned(time(0)));
+
     Game game(1920, 1200);
     game.run();
 
