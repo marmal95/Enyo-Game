@@ -12,7 +12,7 @@ World::World(sf::RenderWindow & window, const sf::Vector2i& dimension)
 	: worldDimension(dimension), mWindow(window), mWorldView(window.getDefaultView()),
 	mTextureHolder(), mAnimationHolder(), mSoundHolder(),
 	qSounds(), entities(), sBackground(),
-	generator(39,24,"seed",1)
+	generator(39,24,"z",1)
 {
 	initializeWold();
 	buildScene();
