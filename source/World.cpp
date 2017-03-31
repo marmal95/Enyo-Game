@@ -16,14 +16,7 @@ World::World(sf::RenderWindow & window, const sf::Vector2i& dimension)
 {
 	initializeWold();
 	buildScene();
-
-	//first draw
-	for(int i = 0; i < 24; ++i)
-		for(int j = 0; j < 39; ++j)
-			if(generator.getField(j,i) == MapField::Wall)
-				entities.push_back(
-					std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall),
-						sf::Vector2f(j*50, i*50), 0, 25));
+	addWalls();
 }
 
 void World::processEvents()
@@ -115,6 +108,16 @@ void World::buildScene()
 	createSmallAsteroids(5);
 }
 
+void World::addWalls()
+{
+	for (int i = 0; i < 24; ++i)
+		for (int j = 0; j < 39; ++j)
+			if (generator.getField(j, i) == MapField::Wall)
+				entities.push_back(
+					std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall),
+						sf::Vector2f(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0, 25));
+}
+
 void World::createPlayer()
 {
 	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), sf::Vector2f(200.F, 200.F), 0.F, 20.F);
@@ -127,8 +130,8 @@ void World::createAsteroids(const uint32_t & count)
 	float x,y;
 	for (uint32_t i = 0; i < count; ++i)
 	{
-		x = rand() % worldDimension.x;
-		y = rand() % worldDimension.y;
+		x = static_cast<float>(rand() % worldDimension.x);
+		y = static_cast<float>(rand() % worldDimension.y);
 		//to be sure that asteroid will not hit wall
 		if(generator.isEmpty(x, y) + generator.isEmpty(x+25.F, y+25.F))
 			entities.push_back(

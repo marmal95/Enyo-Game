@@ -46,6 +46,7 @@ private:
 private:
 	void initializeWold();
 	void buildScene();
+	void addWalls();
 
 	void createPlayer();
 	void createAsteroids(const uint32_t& count);
