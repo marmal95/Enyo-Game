@@ -2,6 +2,7 @@
 #include "GamePlay.h"
 
 #include <iostream>
+#include <cmath>
 
 /**
  * Initializes Player Data
