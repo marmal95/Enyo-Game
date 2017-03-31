@@ -7,7 +7,7 @@
 class Explosion : public Entity
 {
 public:
-    Explosion(const World* window, const Animation &animation, const sf::Vector2f& position,
+    Explosion(const GamePlay* window, const Animation &animation, const sf::Vector2f& position,
               const float &angle = 0, const float &radius = 1);
     void update() override ;
 };

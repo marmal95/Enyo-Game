@@ -5,18 +5,22 @@
 #include "Entity.h"
 #include "Player.h"
 #include "MapGenerator.h"
+#include "GameStage.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 #include <list>
 
-class World
+class GamePlay : public GameStage
 {
 private:
+	// Game Dimension
 	sf::Vector2i worldDimension;
-	sf::RenderWindow& mWindow;
+
+	// Camera
 	sf::View mWorldView;
 
 	//Map generator
@@ -60,10 +64,13 @@ private:
 	bool isCollide(const Entity* const a, const Entity* const b);
 
 public:
-	World(sf::RenderWindow& window, const sf::Vector2i& dimension);
-	void processEvents();
-	void update();
-	void draw();
+	GamePlay(sf::RenderWindow& window, const sf::Vector2i& dimension);
+
+	virtual void init() override;
+	virtual bool update(float dt) override;
+	virtual void draw(sf::RenderWindow &window) override;
+	virtual void release() override;
+	virtual void handleUserInput(sf::Keyboard::Key key, bool pressed) override;
 
 	sf::Vector2i getDimension() const;
 };

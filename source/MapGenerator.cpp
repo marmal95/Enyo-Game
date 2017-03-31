@@ -50,7 +50,7 @@ inline uint32_t MapGenerator::getY() const
 */
 void MapGenerator::initialize()
 {
-	srand(seed);
+//	srand(seed);
 	int toss = 0;
 	for (auto& field : fields)
 	{

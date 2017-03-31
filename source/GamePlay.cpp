@@ -1,4 +1,3 @@
-#include "World.h"
 #include "Asteroid.h"
 #include "Explosion.h"
 #include "Bullet.h"
@@ -8,64 +7,71 @@
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Window/Event.hpp>
 
-World::World(sf::RenderWindow & window, const sf::Vector2i& dimension)
-	: worldDimension(dimension), mWindow(window), mWorldView(window.getDefaultView()),
+GamePlay::GamePlay(sf::RenderWindow & window, const sf::Vector2i& dimension)
+	: worldDimension(dimension), mWorldView(window.getDefaultView()),
 	mTextureHolder(), mAnimationHolder(), mSoundHolder(),
 	qSounds(), entities(), sBackground(),
-	generator(39,24,"z",1)
+	generator(39, 24, "z", 1)
+{}
+
+void GamePlay::init()
 {
 	initializeWold();
 	buildScene();
 	addWalls();
 }
 
-void World::processEvents()
-{
-	sf::Event event;
-	while (mWindow.pollEvent(event))
-	{
-		if (event.type == sf::Event::Closed)
-			mWindow.close();
-
-		if (event.type == sf::Event::KeyPressed)
-			if (event.key.code == sf::Keyboard::Space)
-			{
-				entities.push_back(
-					std::make_unique<Bullet>(this, mAnimationHolder.getResource(ID::BulletBlue), sf::Vector2f(playerAircraft->getPosition().x,
-						playerAircraft->getPosition().y), playerAircraft->getRotation(), 10.F));
-				qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BulletBlueSound)));
-				qSounds.back().play();
-			}
-	}
-}
-
-void World::update()
+bool GamePlay::update(float dt)
 {
 	checkPlayerMove();
 	checkCollisions();
 	checkUpdateEntities();
 	checkSounds();
+
+	return true;
 }
 
-void World::draw()
+void GamePlay::draw(sf::RenderWindow & window)
 {
 	mWorldView.setCenter(playerAircraft->getPosition());
-	mWindow.setView(mWorldView);
+	window.setView(mWorldView);
 
 	// Draw Background
-	mWindow.draw(sBackground);
+	window.draw(sBackground);
 
 	// Draw all entities
 	for (const auto& i : entities)
-		mWindow.draw(*i);
+		window.draw(*i);
 }
 
-sf::Vector2i World::getDimension() const
+void GamePlay::release()
+{
+}
+
+void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
+{
+	switch (key)
+	{
+	case sf::Keyboard::Space:
+		if (pressed)
+		{
+			entities.push_back(
+				std::make_unique<Bullet>(this, mAnimationHolder.getResource(ID::BulletBlue), sf::Vector2f(playerAircraft->getPosition().x,
+					playerAircraft->getPosition().y), playerAircraft->getRotation(), 10.F));
+			qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BulletBlueSound)));
+			qSounds.back().play();
+		}
+		break;
+	}
+}
+
+
+sf::Vector2i GamePlay::getDimension() const
 {
 	return worldDimension;
 }
 
-void World::initializeWold()
+void GamePlay::initializeWold()
 {
 	mTextureHolder.load(ID::Explosion, "images/type_C.png");
 	mTextureHolder.load(ID::RockBig, "images/rock.png");
@@ -93,7 +99,7 @@ void World::initializeWold()
 	mSoundHolder.load(ID::BulletBlueSound, "sounds/laser_blue.wav");
 }
 
-void World::buildScene()
+void GamePlay::buildScene()
 {
 	// Create Map
 	// ...
@@ -103,12 +109,12 @@ void World::buildScene()
 
 	// Create Bigger Asteroids in Random positions
 	createAsteroids(15);
-	
+
 	// Create Smaller Asteroids in Random positions
 	createSmallAsteroids(5);
 }
 
-void World::addWalls()
+void GamePlay::addWalls()
 {
 	for (int i = 0; i < 24; ++i)
 		for (int j = 0; j < 39; ++j)
@@ -118,31 +124,31 @@ void World::addWalls()
 						sf::Vector2f(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0, 25));
 }
 
-void World::createPlayer()
+void GamePlay::createPlayer()
 {
 	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), sf::Vector2f(200.F, 200.F), 0.F, 20.F);
 	playerAircraft = player.get();
 	entities.push_back(std::move(player));
 }
 
-void World::createAsteroids(const uint32_t & count)
+void GamePlay::createAsteroids(const uint32_t & count)
 {
-	float x,y;
+	float x, y;
 	for (uint32_t i = 0; i < count; ++i)
 	{
 		x = static_cast<float>(rand() % worldDimension.x);
 		y = static_cast<float>(rand() % worldDimension.y);
 		//to be sure that asteroid will not hit wall
-		if(generator.isEmpty(x, y) && generator.isEmpty(x+25.F, y+25.F))
+		if (generator.isEmpty(x, y) && generator.isEmpty(x + 25.F, y + 25.F))
 			entities.push_back(
-			std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockBig),
-				sf::Vector2f(x , y), static_cast<float>(rand() % 360), 25.F));
+				std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockBig),
+					sf::Vector2f(x, y), static_cast<float>(rand() % 360), 25.F));
 		else
 			--i;//to create count asteroids
 	}
 }
 
-void World::createSmallAsteroids(const uint32_t & count)
+void GamePlay::createSmallAsteroids(const uint32_t & count)
 {
 	for (uint32_t i = 0; i < count; ++i)
 		entities.push_back(
@@ -150,11 +156,11 @@ void World::createSmallAsteroids(const uint32_t & count)
 				sf::Vector2f(
 					static_cast<float>(rand() % worldDimension.x),
 					static_cast<float>(rand() % worldDimension.y)),
-					static_cast<float>(rand() % 360), 15.F));
+				static_cast<float>(rand() % 360), 15.F));
 }
 
 
-void World::checkPlayerMove()
+void GamePlay::checkPlayerMove()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) playerAircraft->rotate(3);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) playerAircraft->rotate(-3);
@@ -166,7 +172,7 @@ void World::checkPlayerMove()
 		playerAircraft->setAnimation(mAnimationHolder.getResource(ID::Spaceship));
 }
 
-void World::checkCollisions()
+void GamePlay::checkCollisions()
 {
 	for (auto& a : entities)
 	{
@@ -231,7 +237,7 @@ void World::checkCollisions()
 	}
 }
 
-void World::checkUpdateEntities()
+void GamePlay::checkUpdateEntities()
 {
 	auto end = entities.end();
 	for (auto i = entities.begin(); i != end;)
@@ -257,7 +263,7 @@ void World::checkUpdateEntities()
 	}
 }
 
-void World::checkSounds()
+void GamePlay::checkSounds()
 {
 	auto end = qSounds.end();
 	for (auto i = qSounds.begin(); i != end;)
@@ -269,7 +275,7 @@ void World::checkSounds()
 	}
 }
 
-bool World::isCollide(const Entity * const a, const Entity * const b)
+bool GamePlay::isCollide(const Entity * const a, const Entity * const b)
 {
 	if (a->getName() == "Wall")
 	{

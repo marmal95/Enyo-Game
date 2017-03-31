@@ -9,7 +9,7 @@
  * @param angle direction angle
  * @param radius object radius
  */
-Explosion::Explosion(const World* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
+Explosion::Explosion(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
     : Entity(window, "Explosion", animation, position, angle, radius)
 {}
 

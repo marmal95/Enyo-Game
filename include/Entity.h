@@ -11,7 +11,7 @@
 constexpr float M_PI = 3.141592F;
 #endif // !M_PI
 
-class World;
+class GamePlay;
 
 class Entity : public SceneNode
 {
@@ -22,10 +22,10 @@ protected:
     std::string name;
     Animation anim;
 
-    const World* window;
+    const GamePlay* window;
 
 public:
-    Entity(const World* window, const std::string& name, const Animation& animation,
+    Entity(const GamePlay* window, const std::string& name, const Animation& animation,
           const sf::Vector2f& position, const float& angle = 0, const float& radius = 1);
     ~Entity();
 

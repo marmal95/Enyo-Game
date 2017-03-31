@@ -1,5 +1,5 @@
 #include "Bullet.h"
-#include "Game.h"
+#include "GamePlay.h"
 
 /**
  * Initializes Bullet Object.
@@ -9,7 +9,7 @@
  * @param angle direction move angle
  * @param radius bullet radius
  */
-Bullet::Bullet(const World* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
+Bullet::Bullet(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
         : Entity(window, "Bullet", animation, position, angle, radius)
 {}
 

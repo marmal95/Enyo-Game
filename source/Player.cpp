@@ -1,7 +1,5 @@
-
-#include "Entity.h"
 #include "Player.h"
-#include "Game.h"
+#include "GamePlay.h"
 
 #include <iostream>
 
@@ -13,7 +11,7 @@
  * @param angle direction angle
  * @param radius player radius
  */
-Player::Player(const World* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
+Player::Player(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
         : Entity(window, "Player", animation, position, angle, radius)
 {}
 
@@ -52,7 +50,7 @@ void Player::update()
 	//if (getPosition().y > window->getDimension().y) setPosition(getPosition().x, 0);
  //   if (getPosition().y < 0.F) setPosition(getPosition().x, window->getDimension().y);
 
-	// Debud¿
+	// Debug
 	if (getPosition().y < 0 || getPosition().y >= window->getDimension().y)
 		mVelocity.y = -mVelocity.y;
 	if (getPosition().x < 0 || getPosition().x >= window->getDimension().x)
