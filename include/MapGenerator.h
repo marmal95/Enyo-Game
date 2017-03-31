@@ -13,6 +13,7 @@ enum class MapField{
 class MapGenerator
 {
 private:
+	uint32_t elementSize;
 	std::vector<MapField> fields;
 	int seed;
 	uint32_t sizeX;
@@ -28,6 +29,8 @@ public:
 	uint32_t getX() const;
 	uint32_t getY() const;
 	MapField& getField(uint32_t x, uint32_t y);
+	MapField getField(uint32_t x, uint32_t y) const;
+	bool isEmpty(const float& x, const float& y) const;
 };
 
 #endif // !ENYO_MAPGENERATOR_H

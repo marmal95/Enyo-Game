@@ -124,13 +124,19 @@ void World::createPlayer()
 
 void World::createAsteroids(const uint32_t & count)
 {
+	float x,y;
 	for (uint32_t i = 0; i < count; ++i)
-		entities.push_back(
+	{
+		x = rand() % worldDimension.x;
+		y = rand() % worldDimension.y;
+		//to be sure that asteroid will not hit wall
+		if(generator.isEmpty(x, y) + generator.isEmpty(x+25.F, y+25.F))
+			entities.push_back(
 			std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockBig),
-				sf::Vector2f(
-					static_cast<float>(rand() % worldDimension.x),
-					static_cast<float>(rand() % worldDimension.y)),
-					static_cast<float>(rand() % 360), 25.F));
+				sf::Vector2f(x , y), static_cast<float>(rand() % 360), 25.F));
+		else
+			--i;
+	}
 }
 
 void World::createSmallAsteroids(const uint32_t & count)

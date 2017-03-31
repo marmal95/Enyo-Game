@@ -11,7 +11,7 @@
  * @param seedStr - text that defines map
 */
 MapGenerator::MapGenerator(const uint32_t & x, const uint32_t & y, const std::string & seedStr, uint8_t steps)
-	: fields(x*y), seed(std::atoi(seedStr.c_str())), sizeX(x), sizeY(y)
+	: fields(x*y), seed(std::atoi(seedStr.c_str())), sizeX(x), sizeY(y), elementSize(50)
 {	
 	initialize();
 
@@ -136,4 +136,26 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y)
 MapField& MapGenerator::getField(uint32_t x, uint32_t y)
 {
 	return fields[y*sizeX + x];
+}
+
+/**
+* Gets field.
+* @param x - x axis coordinate
+* @param y - y axis coordinate
+* @return field at [x,y] position
+*/
+MapField MapGenerator::getField(uint32_t x, uint32_t y) const
+{
+	return fields[y*sizeX + x];
+}
+
+/**
+* Checks if field is empty
+* @param x - x axis
+* @param y - y axis
+* @return bool if is empty
+*/
+bool MapGenerator::isEmpty(const float & x, const float & y) const
+{
+	return (getField(static_cast<uint32_t>(x/elementSize), static_cast<uint32_t>(y / elementSize)) == MapField::Empty);
 }
