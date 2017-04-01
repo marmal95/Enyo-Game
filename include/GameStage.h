@@ -3,6 +3,10 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
+/**
+ * GameStage is an abstract class. All Game stages have to inherit from that class.
+ * GameStage has five pure virtual methods that must be implemented in inherited classes.
+ */
 class GameStage
 {
 public:

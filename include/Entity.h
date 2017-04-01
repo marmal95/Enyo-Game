@@ -33,8 +33,8 @@ public:
 	virtual void update() override;
 
 	void setVelocity(const sf::Vector2f& velocity);
-	void setVolocity(float dx, float dy);
-	sf::Vector2f getVolocity() const;
+	void setVelocity(float dx, float dy);
+	sf::Vector2f getVelocity() const;
 
     float getRadius() const;
     bool getLife() const;

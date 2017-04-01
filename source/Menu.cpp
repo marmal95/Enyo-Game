@@ -4,11 +4,17 @@
 #include <iostream>
 #include <SFML/Window/Event.hpp>
 
+/**
+ * Initializes Menu
+ */
 Menu::Menu()
         : textNumber(2), selectedItem(0), menuOptions{}, font(),
           tBackground(), sBackground()
 {}
 
+/**
+ * Selects higher menu option
+ */
 void Menu::moveUp()
 {
     if (selectedItem - 1 >= 0)
@@ -19,6 +25,9 @@ void Menu::moveUp()
     }
 }
 
+/**
+ * Selects lower menu option
+ */
 void Menu::moveDown()
 {
     if (selectedItem + 1 < 2)
@@ -29,16 +38,26 @@ void Menu::moveDown()
     }
 }
 
+/**
+ * Destructs menu
+ */
 Menu::~Menu()
 {
 	this->release();
 }
 
-int Menu::getSelectedOption()
+/**
+ * Get chosen option
+ * @return selected option by user
+ */
+int Menu::getSelectedOption() const
 {
 	return selectedItem;
 }
 
+/**
+ * Initializes menu. Loads resources.
+ */
 void Menu::init()
 {
 	if (!font.loadFromFile("fonts/cosmic_font.ttf"))
@@ -60,13 +79,20 @@ void Menu::init()
 	sBackground.setTexture(tBackground);
 }
 
+/**
+ * Updates Menu until Space is clicked - menu option chosen
+ * @param dt frame time
+ * @return if keep updating
+ */
 bool Menu::update(float dt)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) 
-		return false;
-	return true;
+	return !sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 }
 
+/**
+ * Draws menu objects on screen
+ * @param window window we draw on
+ */
 void Menu::draw(sf::RenderWindow & window)
 {
 	window.draw(sBackground);
@@ -74,9 +100,17 @@ void Menu::draw(sf::RenderWindow & window)
 		window.draw(menuOptions[i]);
 }
 
+/**
+ * Deletes allocated objects
+ */
 void Menu::release()
 {}
 
+/**
+ * Handles user input
+ * @param key clicked key by user
+ * @param pressed true - if pressed, false - if released
+ */
 void Menu::handleUserInput(sf::Keyboard::Key key, bool pressed)
 {
 	if (pressed && key == sf::Keyboard::Up)

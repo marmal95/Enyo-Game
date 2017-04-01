@@ -106,8 +106,8 @@ void MapGenerator::doSimulation()
 int MapGenerator::countAlive(uint32_t x, uint32_t y)
 {
 	int alive = 0;
-	int nbhX = x;
-	int nbhY = y;
+	int nbhX;
+	int nbhY;
 	for (int i = -1; i < 2; ++i)
 	{
 		for (int j = -1; j < 2; ++j)
@@ -119,7 +119,7 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y)
 			else if (nbhX < 0 || nbhX >= static_cast<int>(sizeX) || nbhY < 0 || nbhY >= static_cast<int>(sizeY))
 				++alive;
 			else
-				if(getField(nbhX, nbhY) != MapField::Empty)
+				if(getField(static_cast<uint32_t>(nbhX), static_cast<uint32_t>(nbhY)) != MapField::Empty)
 					++alive;
 		}
 	}

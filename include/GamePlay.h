@@ -14,6 +14,10 @@
 
 #include <list>
 
+/**
+ * GamePlay class controls whole play in game.
+ * Must implement pure virtual functions from base class.
+ */
 class GamePlay : public GameStage
 {
 private:

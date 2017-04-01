@@ -31,7 +31,7 @@ public:
 	Menu& operator=(const Menu&) = delete;
 	virtual ~Menu();
 
-    int getSelectedOption();
+    int getSelectedOption() const;
 
 	virtual void init() override;
 	virtual bool update(float dt) override;

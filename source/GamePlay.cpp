@@ -3,10 +3,14 @@
 #include "Bullet.h"
 #include "Wall.h"
 
-#include <SFML/Window/Keyboard.hpp>
-#include <SFML/Audio/Sound.hpp>
 #include <SFML/Window/Event.hpp>
+#include <cmath>
 
+/**
+ * Initializes GamePlay
+ * @param window window we play on
+ * @param dimension window dimension
+ */
 GamePlay::GamePlay(sf::RenderWindow & window, const sf::Vector2i& dimension)
 	: worldDimension(dimension), mWorldView(window.getDefaultView()),
 	mTextureHolder(), mAnimationHolder(), mSoundHolder(),
@@ -14,6 +18,9 @@ GamePlay::GamePlay(sf::RenderWindow & window, const sf::Vector2i& dimension)
 	generator(39, 24, "z", 1)
 {}
 
+/**
+ * Initializes GamePlay.
+ */
 void GamePlay::init()
 {
 	initializeWold();
@@ -21,6 +28,11 @@ void GamePlay::init()
 	addWalls();
 }
 
+/**
+ * Updates Game logic
+ * @param dt frame time
+ * @return true - if keep updating, false - otherwise
+ */
 bool GamePlay::update(float dt)
 {
 	checkPlayerMove();
@@ -31,6 +43,10 @@ bool GamePlay::update(float dt)
 	return true;
 }
 
+/**
+ * Draws Game objects on screen.
+ * @param window window we draw on
+ */
 void GamePlay::draw(sf::RenderWindow & window)
 {
 	mWorldView.setCenter(playerAircraft->getPosition());
@@ -44,10 +60,19 @@ void GamePlay::draw(sf::RenderWindow & window)
 		window.draw(*i);
 }
 
+/**
+ * Releases allocated resources
+ */
 void GamePlay::release()
 {
+    // Nothing to release.
 }
 
+/**
+ * Handles user input
+ * @param key key pressed by user
+ * @param pressed true - if pressed, false - if released
+ */
 void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
 {
 	switch (key)
@@ -62,15 +87,24 @@ void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
 			qSounds.back().play();
 		}
 		break;
+
+		default:
+			break;
 	}
 }
 
-
+/**
+ * Get game dimension
+ * @return game dimension
+ */
 sf::Vector2i GamePlay::getDimension() const
 {
 	return worldDimension;
 }
 
+/**
+ * Initializes Game world. Loads resources.
+ */
 void GamePlay::initializeWold()
 {
 	mTextureHolder.load(ID::Explosion, "images/type_C.png");
@@ -99,6 +133,9 @@ void GamePlay::initializeWold()
 	mSoundHolder.load(ID::BulletBlueSound, "sounds/laser_blue.wav");
 }
 
+/**
+ * Builds game scene. Player, enemies etc...
+ */
 void GamePlay::buildScene()
 {
 	// Create Map
@@ -114,16 +151,22 @@ void GamePlay::buildScene()
 	createSmallAsteroids(5);
 }
 
+/**
+ * Creates walls
+ */
 void GamePlay::addWalls()
 {
 	for (int i = 0; i < 24; ++i)
 		for (int j = 0; j < 39; ++j)
-			if (generator.getField(j, i) == MapField::Wall)
+			if (generator.getField(static_cast<uint32_t>(j), static_cast<uint32_t>(i)) == MapField::Wall)
 				entities.push_back(
 					std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall),
 						sf::Vector2f(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0, 25));
 }
 
+/**
+ * Creates Player's aircraft
+ */
 void GamePlay::createPlayer()
 {
 	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), sf::Vector2f(200.F, 200.F), 0.F, 20.F);
@@ -131,6 +174,10 @@ void GamePlay::createPlayer()
 	entities.push_back(std::move(player));
 }
 
+/**
+ * Creates Asteroids
+ * @param count number of asteroids to create
+ */
 void GamePlay::createAsteroids(const uint32_t & count)
 {
 	float x, y;
@@ -148,6 +195,10 @@ void GamePlay::createAsteroids(const uint32_t & count)
 	}
 }
 
+/**
+ * Creates small Asteroids
+ * @param count number of asteroids to create
+ */
 void GamePlay::createSmallAsteroids(const uint32_t & count)
 {
 	float x, y;
@@ -165,7 +216,9 @@ void GamePlay::createSmallAsteroids(const uint32_t & count)
 	}
 }
 
-
+/**
+ * Checks if players wants to move
+ */
 void GamePlay::checkPlayerMove()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) playerAircraft->rotate(3);
@@ -178,6 +231,9 @@ void GamePlay::checkPlayerMove()
 		playerAircraft->setAnimation(mAnimationHolder.getResource(ID::Spaceship));
 }
 
+/**
+ * Checks Entities collisions.
+ */
 void GamePlay::checkCollisions()
 {
 	for (auto& a : entities)
@@ -218,7 +274,7 @@ void GamePlay::checkCollisions()
 				qSounds.back().play();
 
 				playerAircraft->setPosition(200, 200);
-				playerAircraft->setVolocity(0, 0);
+                playerAircraft->setVelocity(0, 0);
 			}
 			else if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
 			{
@@ -229,11 +285,11 @@ void GamePlay::checkCollisions()
 				qSounds.back().play();
 
 				playerAircraft->setPosition(200, 200);
-				playerAircraft->setVolocity(0, 0);
+                playerAircraft->setVelocity(0, 0);
 			}
 			else if (a->getName() == "Asteroid" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
 			{
-				a->setVolocity(a->getVolocity().x*-1, a->getVolocity().y*-1);
+                a->setVelocity(a->getVelocity().x * -1, a->getVelocity().y * -1);
 			}
 			else if (a->getName() == "Bullet" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
 			{
@@ -243,6 +299,9 @@ void GamePlay::checkCollisions()
 	}
 }
 
+/**
+ * Updates Entities and their animation. Remove them if not alive.
+ */
 void GamePlay::checkUpdateEntities()
 {
 	auto end = entities.end();
@@ -269,6 +328,9 @@ void GamePlay::checkUpdateEntities()
 	}
 }
 
+/**
+ * Checks Game sounds. If stopped playing - remove them.
+ */
 void GamePlay::checkSounds()
 {
 	auto end = qSounds.end();
@@ -281,12 +343,18 @@ void GamePlay::checkSounds()
 	}
 }
 
+/**
+ * Checks if there was collision between two entities
+ * @param a first entity
+ * @param b second entity
+ * @return true - if there was collion, false - otherwise
+ */
 bool GamePlay::isCollide(const Entity * const a, const Entity * const b)
 {
 	if (a->getName() == "Wall")
 	{
-		float circleDistX = abs(b->getPosition().x - a->getPosition().x);
-		float circleDistY = abs(b->getPosition().y - a->getPosition().y);
+		float circleDistX = static_cast<float>(fabs(b->getPosition().x - a->getPosition().x));
+		float circleDistY = static_cast<float>(fabs(b->getPosition().y - a->getPosition().y));
 
 		if (circleDistX > (a->getRadius() / 2 + b->getRadius()))
 			return false;

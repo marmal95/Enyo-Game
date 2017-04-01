@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "GamePlay.h"
 
-#include <iostream>
 #include <cmath>
 
 /**
@@ -58,11 +57,19 @@ void Player::update()
 		mVelocity.x = -mVelocity.x;
 }
 
+/**
+ * Return if player is moving
+ * @return true - if player is moving, false - otherwise
+ */
 bool Player::isMoving() const
 {
     return moving;
 }
 
+/**
+ * Sets if player is moving
+ * @param moving true - if is moving, false - otherwise
+ */
 void Player::setMoving(bool moving)
 {
     this->moving = moving;

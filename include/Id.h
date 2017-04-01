@@ -8,7 +8,7 @@ enum class ID
     RockBig,
     RockSmall,
     BulletBlue,
-    BulletRed,
+//    BulletRed,
     Spaceship,
     SpaceshipFly,
     ExplosionShip,
