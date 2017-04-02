@@ -6,6 +6,8 @@
 #include <SFML/Window/Event.hpp>
 #include <cmath>
 
+#include <iostream>
+
 /**
  * Initializes GamePlay
  * @param window window we play on
@@ -49,21 +51,8 @@ bool GamePlay::update(float dt)
  */
 void GamePlay::draw(sf::RenderWindow & window)
 {
-	mWorldView.setCenter([&window](sf::Vector2f position) -> sf::Vector2f
-		{ 
-			if(position.x < 670.F) 
-				position.x = 670.F;
-			if(position.y < 400.F)
-				position.y = 400.F;
-
-			if(position.x > window.getSize().x - 670.f)
-				position.x = window.getSize().x - 670.f;
-
-			if (position.y > window.getSize().y - 380.f)
-				position.y = window.getSize().y - 380.f;
-
-			return position;
-		} (playerAircraft->getPosition()));
+	
+	mWorldView.setCenter(playerAircraft->getPosition());
 	window.setView(mWorldView);
 
 	// Draw Background
