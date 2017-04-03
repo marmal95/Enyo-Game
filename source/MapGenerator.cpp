@@ -23,13 +23,16 @@ MapGenerator::MapGenerator(const uint32_t & x, const uint32_t & y, const std::st
 	{
 		for (uint32_t i = 0; i < x; ++i)
 		{
-			std::cout << static_cast<uint8_t>(fields[j*x+i]);
+			if(fields[j*x+i] == MapField::Empty)
+				std::cout << " ";
+			else
+				std::cout << "X";
 		}
 		std::cout << std::endl;
 	}
 }
 
-/*
+/**
 * Return X size of map
 */
 inline uint32_t MapGenerator::getX() const

@@ -35,6 +35,7 @@ public:
 	void setVelocity(const sf::Vector2f& velocity);
 	void setVelocity(float dx, float dy);
 	sf::Vector2f getVelocity() const;
+	sf::Vector2f& getVelocity();
 
     float getRadius() const;
     bool getLife() const;
