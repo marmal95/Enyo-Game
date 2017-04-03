@@ -21,7 +21,7 @@ private:
 
 	void initialize();
 	void doSimulation();
-	int countAlive(uint32_t x, uint32_t y);
+	int countAlive(uint32_t x, uint32_t y) const;
 
 public:
 	MapGenerator(const uint32_t& x, const uint32_t& y, const std::string& seedStr, uint8_t steps = 5);
@@ -31,6 +31,7 @@ public:
 	MapField& getField(uint32_t x, uint32_t y);
 	MapField getField(uint32_t x, uint32_t y) const;
 	bool isEmpty(const float& x, const float& y) const;
+	sf::Vector2f getStartPoint() const;
 };
 
 #endif // !ENYO_MAPGENERATOR_H

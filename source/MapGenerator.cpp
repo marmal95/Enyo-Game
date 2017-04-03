@@ -103,7 +103,7 @@ void MapGenerator::doSimulation()
 /**
 * Counts Entities around field
 */
-int MapGenerator::countAlive(uint32_t x, uint32_t y)
+int MapGenerator::countAlive(uint32_t x, uint32_t y) const
 {
 	int alive = 0;
 	int nbhX;
@@ -125,6 +125,23 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y)
 	}
 
 	return alive;
+}
+
+sf::Vector2f MapGenerator::getStartPoint() const
+{
+	bool found = false;
+	uint32_t x,y;
+	while(!found)
+	{
+		x = rand()%sizeX;
+		y = rand()%sizeY;
+		
+		if(countAlive(x,y) == 0)
+			found = true;
+	}
+
+	return sf::Vector2f(x*elementSize,y*elementSize);
+
 }
 
 /**

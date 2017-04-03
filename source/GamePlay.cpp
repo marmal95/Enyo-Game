@@ -172,7 +172,7 @@ void GamePlay::addWalls()
  */
 void GamePlay::createPlayer()
 {
-	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), sf::Vector2f(200.F, 200.F), 0.F, 20.F);
+	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(), 0.F, 20.F);
 	playerAircraft = player.get();
 	entities.push_back(std::move(player));
 }
@@ -292,7 +292,14 @@ void GamePlay::checkCollisions()
 			}
 			else if (a->getName() == "Asteroid" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
 			{
-                a->setVelocity(a->getVelocity().x * -1, a->getVelocity().y * -1);
+				if (a->getPosition().x > b->getPosition().x && a->getPosition().x < b->getPosition().x + 50)
+				{
+					a->setVelocity(sf::Vector2f(a->getVelocity().x,-a->getVelocity().y));
+				}
+				else
+				{
+					a->setVelocity(sf::Vector2f(-a->getVelocity().x, a->getVelocity().y));
+				}
 			}
 			else if (a->getName() == "Bullet" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
 			{
