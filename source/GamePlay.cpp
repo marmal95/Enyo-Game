@@ -190,7 +190,8 @@ void GamePlay::addWalls()
  */
 void GamePlay::createPlayer()
 {
-	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(), 0.F, 20.F);
+    auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(),
+                                           0.F, 20.F);
     playerAircraft = player.get();
     entities.push_back(std::move(player));
 }
@@ -291,7 +292,8 @@ void GamePlay::checkCollisions()
                                                        sf::Vector2f(a->getPosition().x, a->getPosition().y),
                                                        rand() % 360, 15));
                 }
-            } else if (a->getName() == "Player" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()))
+            }
+            else if (a->getName() == "Player" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()))
             {
                 b->setLife(false);
                 entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip),
@@ -302,7 +304,8 @@ void GamePlay::checkCollisions()
 
                 playerAircraft->setPosition(200, 200);
                 playerAircraft->setVelocity(0, 0);
-            } else if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+            }
+            else if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
             {
                 entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip),
                                                                sf::Vector2f(a->getPosition().x, a->getPosition().y)));
@@ -312,20 +315,32 @@ void GamePlay::checkCollisions()
 
                 playerAircraft->setPosition(200, 200);
                 playerAircraft->setVelocity(0, 0);
-            } else if (a->getName() == "Asteroid" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+            }
+            else if (a->getName() == "Asteroid" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
             {
-                if (a->getPosition().x > b->getPosition().x &&
-                    a->getPosition().x < b->getPosition().x + b->getRadius())
-                {
-                    //	a->setVelocity(sf::Vector2f(a->getVelocity().x, -a->getVelocity().y));
-                    a->getVelocity().y *= -1;
-                } else
-                {
-                    //	a->setVelocity(sf::Vector2f(-a->getVelocity().x, a->getVelocity().y));
-                    a->getVelocity().x *= -1;
-                }
+                // Current Velocity Vector
+                float vX = a->getVelocity().x;
+                float vY = a->getVelocity().y;
 
-            } else if (a->getName() == "Bullet" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+                // Normal Line
+                float nX = b->getPosition().x - a->getPosition().x;
+                float nY = b->getPosition().y - a->getPosition().y;
+
+                // Normalize N - vector
+                float nLen = static_cast<float>(sqrt(nX * nX + nY * nY));
+                nX /= nLen;
+                nY /= nLen;
+
+                // V * N - dot product
+                float dotProd_VN = vX*nX + vY*nY;
+
+                // New V vector
+                float nVX = vX - 2*dotProd_VN*nX;
+                float nVY = vY - 2*dotProd_VN*nY;
+
+                a->setVelocity(nVX, nVY);
+            }
+            else if (a->getName() == "Bullet" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
             {
                 a->setLife(false);
             }

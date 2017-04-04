@@ -1,4 +1,6 @@
 
+#include <cmath>
+#include <iostream>
 #include "Entity.h"
 #include "Asteroid.h"
 #include "GamePlay.h"
