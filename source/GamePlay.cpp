@@ -302,8 +302,8 @@ void GamePlay::checkCollisions()
                 qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
                 qSounds.back().play();
 
-                playerAircraft->setPosition(200, 200);
-                playerAircraft->setVelocity(0, 0);
+                    playerAircraft->setPosition(200, 200);
+                   playerAircraft->setVelocity(0, 0);
             }
             else if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
             {
@@ -313,14 +313,17 @@ void GamePlay::checkCollisions()
                 qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
                 qSounds.back().play();
 
-                playerAircraft->setPosition(200, 200);
-                playerAircraft->setVelocity(0, 0);
+                    playerAircraft->setPosition(200, 200);
+                   playerAircraft->setVelocity(0, 0);
             }
             else if (a->getName() == "Asteroid" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
             {
                 // Current Velocity Vector
                 float vX = a->getVelocity().x;
                 float vY = a->getVelocity().y;
+
+                // Velocity Vector Norm
+                float vLen = static_cast<float>(sqrt(vX*vX+vY*vY));
 
                 // Normal Line
                 float nX = b->getPosition().x - a->getPosition().x;
@@ -332,12 +335,18 @@ void GamePlay::checkCollisions()
                 nY /= nLen;
 
                 // V * N - dot product
-                float dotProd_VN = vX*nX + vY*nY;
+                float dotProd_VN = vX * nX + vY * nY;
 
                 // New V vector
-                float nVX = vX - 2*dotProd_VN*nX;
-                float nVY = vY - 2*dotProd_VN*nY;
+                float nVX = vX - 2 * dotProd_VN * nX;
+                float nVY = vY - 2 * dotProd_VN * nY;
 
+                // Reflection Angle
+                float refAngle = static_cast<float>(acos(dotProd_VN / (vLen * nLen)));
+                refAngle *= 2 * 180./M_PI;
+
+                // Bounce and Rotate
+            //    a->rotate(refAngle);
                 a->setVelocity(nVX, nVY);
             }
             else if (a->getName() == "Bullet" && b->getName() == "Wall" && isCollide(a.get(), b.get()))

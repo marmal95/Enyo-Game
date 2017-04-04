@@ -34,11 +34,13 @@ Entity::~Entity() {}
 void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(anim.getSprite());
 
+#ifdef DEBUG
     sf::CircleShape circle(this->radius);
     circle.setFillColor(sf::Color(255, 0, 0, 170));
     circle.setPosition(getPosition());
     circle.setOrigin(radius, radius);
     target.draw(circle);
+#endif
 }
 
 /**

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.7)
 project(Enyo_Game)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS_DEBUG "-DDEBUG")
 
 set(SOURCE_FILES main.cpp include/Animation.h source/Animation.cpp include/Application.h source/Application.cpp include/Asteroid.h source/Asteroid.cpp include/Bullet.h source/Bullet.cpp include/Entity.h source/Entity.cpp include/Explosion.h source/Explosion.cpp include/GamePlay.h source/GamePlay.cpp include/GameStage.h source/GameStage.cpp include/Id.h include/MapGenerator.h source/MapGenerator.cpp include/Menu.h source/Menu.cpp include/Player.h source/Player.cpp include/ResourceHolder.hpp include/SceneNode.h include/Wall.h source/Wall.cpp)
 
