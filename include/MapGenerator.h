@@ -7,7 +7,8 @@
 
 enum class MapField{
 	Empty,
-	Wall
+	Wall,
+	Asteroid
 };
 
 class MapGenerator
@@ -28,8 +29,9 @@ public:
 
 	uint32_t getX() const;
 	uint32_t getY() const;
-	MapField& getField(uint32_t x, uint32_t y);
-	MapField getField(uint32_t x, uint32_t y) const;
+	MapField& getField(const uint32_t& x, const uint32_t& y);
+	MapField getField(const uint32_t& x, const uint32_t& y) const;
+	void setField(const uint32_t& x, const uint32_t& y, const MapField& field);
 	bool isEmpty(const float& x, const float& y) const;
 	sf::Vector2f getStartPoint() const;
 };

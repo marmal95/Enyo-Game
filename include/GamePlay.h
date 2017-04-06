@@ -67,6 +67,8 @@ private:
 
 	bool isCollide(const Entity* const a, const Entity* const b);
 
+	bool canSpawn(const float& x, const float& y, const float& radius);
+
 public:
 	GamePlay(sf::RenderWindow& window, const sf::Vector2i& dimension);
 

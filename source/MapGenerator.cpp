@@ -153,7 +153,7 @@ sf::Vector2f MapGenerator::getStartPoint() const
 * @param y - y axis coordinate
 * @return field at [x,y] position
 */
-MapField& MapGenerator::getField(uint32_t x, uint32_t y)
+MapField& MapGenerator::getField(const uint32_t& x, const uint32_t& y)
 {
 	return fields[y*sizeX + x];
 }
@@ -164,9 +164,14 @@ MapField& MapGenerator::getField(uint32_t x, uint32_t y)
 * @param y - y axis coordinate
 * @return field at [x,y] position
 */
-MapField MapGenerator::getField(uint32_t x, uint32_t y) const
+MapField MapGenerator::getField(const uint32_t& x, const uint32_t& y) const
 {
 	return fields[y*sizeX + x];
+}
+
+void MapGenerator::setField (const uint32_t & x, const uint32_t & y, const MapField & field)
+{
+	fields[static_cast<uint32_t>(y / elementSize)*sizeX + static_cast<uint32_t>(x / elementSize)] = field;
 }
 
 /**

@@ -10,6 +10,7 @@ Application::Application(const sf::Vector2i& windowDimension)
 	windowDimension(windowDimension), pStage(nullptr)
 {
 	window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(60);
 }
 
 void Application::run()

@@ -208,10 +208,7 @@ void GamePlay::createAsteroids(const uint32_t& count)
         x = static_cast<float>(rand() % worldDimension.x);
         y = static_cast<float>(rand() % worldDimension.y);
         //to be sure that asteroid will not hit wall
-        if (generator.isEmpty(x, y) && generator.isEmpty(x - 25.F, y - 25.F) && generator.isEmpty(x, y - 25.F) &&
-            generator.isEmpty(x + 25.F, y - 25.F) && generator.isEmpty(x - 25.F, y) && generator.isEmpty(x + 25.F, y) &&
-            generator.isEmpty(x + 25.F, y + 25.F) && generator.isEmpty(x, y + 25.F) &&
-            generator.isEmpty(x - 25.F, y + 25.F))
+        if (canSpawn(x,y,25.F))
             entities.push_back(
                     std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockBig),
                                                sf::Vector2f(x, y), static_cast<float>(rand() % 360), 25.F));
@@ -232,10 +229,7 @@ void GamePlay::createSmallAsteroids(const uint32_t& count)
         x = static_cast<float>(rand() % worldDimension.x);
         y = static_cast<float>(rand() % worldDimension.y);
         //to be sure that asteroid will not hit wall
-        if (generator.isEmpty(x, y) && generator.isEmpty(x - 25.F, y - 25.F) && generator.isEmpty(x, y - 25.F) &&
-            generator.isEmpty(x + 25.F, y - 25.F) && generator.isEmpty(x - 25.F, y) && generator.isEmpty(x + 25.F, y) &&
-            generator.isEmpty(x + 25.F, y + 25.F) && generator.isEmpty(x, y + 25.F) &&
-            generator.isEmpty(x - 25.F, y + 25.F))
+        if (canSpawn(x,y,15.f))
             entities.push_back(
                     std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockSmall),
                                                sf::Vector2f(x, y), static_cast<float>(rand() % 360), 15.F));
@@ -445,4 +439,12 @@ bool GamePlay::isCollide(const Entity* const a, const Entity* const b)
     return (b->getPosition().x - a->getPosition().x) * (b->getPosition().x - a->getPosition().x) +
            (b->getPosition().y - a->getPosition().y) * (b->getPosition().y - a->getPosition().y) <
            (a->getRadius() + b->getRadius()) * (a->getRadius() + b->getRadius());
+}
+
+bool GamePlay::canSpawn (const float & x, const float & y, const float & radius)
+{
+	return generator.isEmpty (x, y) && generator.isEmpty (x - radius, y - radius) && generator.isEmpty (x, y - radius) &&
+		generator.isEmpty (x + radius, y - radius) && generator.isEmpty (x - radius, y) && generator.isEmpty (x + radius, y) &&
+		generator.isEmpty (x + radius, y + radius) && generator.isEmpty (x, y + radius) &&
+		generator.isEmpty (x - radius, y + radius);
 }
