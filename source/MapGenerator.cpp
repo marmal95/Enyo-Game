@@ -143,7 +143,7 @@ sf::Vector2f MapGenerator::getStartPoint() const
 			found = true;
 	}
 
-	return sf::Vector2f(x*elementSize,y*elementSize);
+	return sf::Vector2f(static_cast<float>(x*elementSize),static_cast<float>(y*elementSize));
 
 }
 

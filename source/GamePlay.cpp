@@ -126,27 +126,27 @@ void GamePlay::initializeWold()
 
     mAnimationHolder.load(ID::Explosion,
                           std::make_unique<Animation>(mTextureHolder.getResource(ID::Explosion), sf::Vector2f(0, 0),
-                                                      256, 256, 48, 0.5));
+                                                      256, 256, 48, 0.5f));
     mAnimationHolder.load(ID::RockBig,
                           std::make_unique<Animation>(mTextureHolder.getResource(ID::RockBig), sf::Vector2f(0, 0), 64,
-                                                      64, 16, 0.2));
+                                                      64, 16, 0.2f));
     mAnimationHolder.load(ID::RockSmall,
                           std::make_unique<Animation>(mTextureHolder.getResource(ID::RockSmall), sf::Vector2f(0, 0), 64,
-                                                      64, 16, 0.2));
+                                                      64, 16, 0.2f));
     mAnimationHolder.load(ID::BulletBlue,
                           std::make_unique<Animation>(mTextureHolder.getResource(ID::BulletBlue), sf::Vector2f(0, 0),
-                                                      32, 64, 16, 0.8));
+                                                      32, 64, 16, 0.8f));
     mAnimationHolder.load(ID::Spaceship,
                           std::make_unique<Animation>(mTextureHolder.getResource(ID::Spaceship), sf::Vector2f(40, 0),
-                                                      40, 40, 1, 0));
+                                                      40, 40, 1, 0.f));
     mAnimationHolder.load(ID::SpaceshipFly, std::make_unique<Animation>(mTextureHolder.getResource(ID::SpaceshipFly),
-                                                                        sf::Vector2f(40, 40), 40, 40, 1, 0));
+                                                                        sf::Vector2f(40, 40), 40, 40, 1, 0.f));
     mAnimationHolder.load(ID::ExplosionShip,
                           std::make_unique<Animation>(mTextureHolder.getResource(ID::ExplosionShip), sf::Vector2f(0, 0),
-                                                      192, 192, 64, 0.5));
+                                                      192, 192, 64, 0.5f));
     mAnimationHolder.load(ID::Wall,
                           std::make_unique<Animation>(mTextureHolder.getResource(ID::Wall), sf::Vector2f(0, 0), 50, 50,
-                                                      1, 0));
+                                                      1, 0.f));
 
     mSoundHolder.load(ID::BigExplosionSound, "sounds/explosion_big.wav");
     mSoundHolder.load(ID::SmallExplosionSound, "sounds/explosion_small.wav");
@@ -181,8 +181,8 @@ void GamePlay::addWalls()
             if (generator.getField(static_cast<uint32_t>(j), static_cast<uint32_t>(i)) == MapField::Wall)
                 entities.push_back(
                         std::make_unique<Wall>(this, mAnimationHolder.getResource(ID::Wall),
-                                               sf::Vector2f(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0,
-                                               25));
+                                               sf::Vector2f(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0.F,
+                                               25.F));
 }
 
 /**
@@ -249,8 +249,8 @@ void GamePlay::createSmallAsteroids(const uint32_t& count)
  */
 void GamePlay::checkPlayerMove()
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) playerAircraft->rotate(3);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) playerAircraft->rotate(-3);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) playerAircraft->rotate(3.f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) playerAircraft->rotate(-3.f);
     playerAircraft->setMoving(sf::Keyboard::isKeyPressed(sf::Keyboard::Up));
 
     if (playerAircraft->isMoving())
@@ -274,7 +274,7 @@ void GamePlay::checkCollisions()
                 b->setLife(false);
 
                 // Play Sound
-                if (a->getRadius() > 20)
+                if (a->getRadius() > 20.f)
                     qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
                 else
                     qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::SmallExplosionSound)));
@@ -285,12 +285,12 @@ void GamePlay::checkCollisions()
 
                 for (int i = 0; i < 2; i++)
                 {
-                    if (a->getRadius() == 15)
+                    if (a->getRadius() == 15.f)
                         break;
                     entities.push_back(
                             std::make_unique<Asteroid>(this, mAnimationHolder.getResource(ID::RockSmall),
                                                        sf::Vector2f(a->getPosition().x, a->getPosition().y),
-                                                       rand() % 360, 15));
+                                                       static_cast<float>(rand() % 360), 15.F));
                 }
             }
             else if (a->getName() == "Player" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()))
@@ -302,8 +302,8 @@ void GamePlay::checkCollisions()
                 qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
                 qSounds.back().play();
 
-                    playerAircraft->setPosition(200, 200);
-                   playerAircraft->setVelocity(0, 0);
+                    playerAircraft->setPosition(200.f, 200.f);
+                   playerAircraft->setVelocity(0.f, 0.f);
             }
             else if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
             {
@@ -313,8 +313,8 @@ void GamePlay::checkCollisions()
                 qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
                 qSounds.back().play();
 
-                    playerAircraft->setPosition(200, 200);
-                   playerAircraft->setVelocity(0, 0);
+                    playerAircraft->setPosition(200.f, 200.f);
+                   playerAircraft->setVelocity(0.f, 0.f);
             }
             else if (a->getName() == "Asteroid" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
             {
@@ -343,12 +343,45 @@ void GamePlay::checkCollisions()
 
                 // Reflection Angle
                 float refAngle = static_cast<float>(acos(dotProd_VN / (vLen * nLen)));
-                refAngle *= 2 * 180./M_PI;
+                refAngle *= 2 * 180.F/M_PI;
 
                 // Bounce and Rotate
             //    a->rotate(refAngle);
                 a->setVelocity(nVX, nVY);
             }
+			else if (a->getName() == "Asteroid" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()) && a != b)
+			{
+				// Current Velocity Vector
+				float vX = a->getVelocity().x;
+				float vY = a->getVelocity().y;
+
+				// Velocity Vector Norm
+				float vLen = static_cast<float>(sqrt(vX*vX + vY*vY));
+
+				// Normal Line
+				float nX = b->getPosition().x - a->getPosition().x;
+				float nY = b->getPosition().y - a->getPosition().y;
+
+				// Normalize N - vector
+				float nLen = static_cast<float>(sqrt(nX * nX + nY * nY));
+				nX /= nLen;
+				nY /= nLen;
+
+				// V * N - dot product
+				float dotProd_VN = vX * nX + vY * nY;
+
+				// New V vector
+				float nVX = vX - 2 * dotProd_VN * nX;
+				float nVY = vY - 2 * dotProd_VN * nY;
+				
+				// Reflection Angle
+				float refAngle = static_cast<float>(acos(dotProd_VN / (vLen * nLen)));
+				refAngle *= 2 * 180.f / M_PI;
+
+				// Bounce and Rotate
+				//    a->rotate(refAngle);
+				a->setVelocity(nVX, nVY);
+			}
             else if (a->getName() == "Bullet" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
             {
                 a->setLife(false);
@@ -376,7 +409,7 @@ void GamePlay::checkUpdateEntities()
 
         // Remove Explosion if finished playing
         if (e->getName() == "Explosion" && e->getAnimation().finished())
-            e->setLife(0);
+            e->setLife(false);
 
         // Erase dead objects
         if (!e->getLife())
