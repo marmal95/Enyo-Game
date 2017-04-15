@@ -14,32 +14,18 @@
  * @param angle direction angle
  * @param radius asteroid radius
  */
-Asteroid::Asteroid(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
-        : Entity(window, "Asteroid", animation, position, angle, radius)
+Asteroid::Asteroid(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, const float& angle, const float& radius)
+	: Entity(window, "Asteroid", animation, position, angle, radius)
 {
-    mVelocity.x = static_cast<float>(rand() % 8 - 4);
+	mVelocity.x = static_cast<float>(rand() % 8 - 4);
 	mVelocity.y = static_cast<float>(rand() % 8 - 4);
 }
 
 /**
  * Updates Asteroid position.
  */
-void Asteroid::update()
+void Asteroid::update(float dt)
 {
-	Entity::update();
-
-	rotate(3);
-	anim.setSpriteRot(getRotation());
+	Entity::update(dt);
 	move(mVelocity);
-
-	//if (getPosition().x > window->getDimension().x) setPosition(0, getPosition().y);
-	//if (getPosition().x < 0.F) setPosition(window->getDimension().x, getPosition().y);
-	//if (getPosition().y > window->getDimension().y) setPosition(getPosition().x, 0);
-	//if (getPosition().y < 0.F) setPosition(getPosition().x, window->getDimension().y);
-
-	// Debug
-	if (getPosition().y < 0 || getPosition().y >= window->getDimension().y)
-		mVelocity.y = -mVelocity.y;
-	if (getPosition().x < 0 || getPosition().x >= window->getDimension().x)
-		mVelocity.x = -mVelocity.x;
 }

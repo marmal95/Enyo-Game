@@ -16,21 +16,31 @@ class GamePlay;
 class Entity : public SceneNode
 {
 protected:
+	// Entity's Actual Velocity
 	sf::Vector2f mVelocity;
+
+	// Entity's Radius
     float radius;
+
+	// Indicates if entity is alive
     bool life;
+
+	// Entity's Name
     std::string name;
+
+	// Animated Sprite 
     Animation anim;
 
+	// Game Window
     const GamePlay* window;
 
 public:
     Entity(const GamePlay* window, const std::string& name, const Animation& animation,
-          const sf::Vector2f& position, const float& angle = 0, const float& radius = 1);
+          const sf::Vector2f& position, const float& angle, const float& radius);
     ~Entity();
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	virtual void update() override;
+	virtual void update(float dt) override;
 
 	void setVelocity(const sf::Vector2f& velocity);
 	void setVelocity(float dx, float dy);

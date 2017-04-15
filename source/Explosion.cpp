@@ -9,15 +9,15 @@
  * @param angle direction angle
  * @param radius object radius
  */
-Explosion::Explosion(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
-    : Entity(window, "Explosion", animation, position, angle, radius)
+Explosion::Explosion(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, const float& angle, const float& radius)
+	: Entity(window, "Explosion", animation, position, angle, radius)
 {}
 
 /**
  * Updates Explosion Object.
  * Does nothing - but must be implemented since Entity is abstract class.
  */
-void Explosion::update()
+void Explosion::update(float dt)
 {
-	Entity::update();
+	Entity::update(dt);
 }

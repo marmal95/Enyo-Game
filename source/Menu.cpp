@@ -8,8 +8,8 @@
  * Initializes Menu
  */
 Menu::Menu()
-        : textNumber(2), selectedItem(0), menuOptions{}, font(),
-          tBackground(), sBackground()
+	: textNumber(2), selectedItem(0), menuOptions{}, font(),
+	tBackground(), sBackground()
 {}
 
 /**
@@ -17,12 +17,12 @@ Menu::Menu()
  */
 void Menu::moveUp()
 {
-    if (selectedItem - 1 >= 0)
-    {
-        menuOptions[selectedItem].setFillColor(sf::Color::White);
-        selectedItem--;
-        menuOptions[selectedItem].setFillColor(sf::Color::Red);
-    }
+	if (selectedItem - 1 >= 0)
+	{
+		menuOptions[selectedItem].setFillColor(sf::Color::White);
+		selectedItem--;
+		menuOptions[selectedItem].setFillColor(sf::Color::Red);
+	}
 }
 
 /**
@@ -30,12 +30,12 @@ void Menu::moveUp()
  */
 void Menu::moveDown()
 {
-    if (selectedItem + 1 < 2)
-    {
-        menuOptions[selectedItem].setFillColor(sf::Color::White);
-        selectedItem++;
-        menuOptions[selectedItem].setFillColor(sf::Color::Red);
-    }
+	if (selectedItem + 1 < 2)
+	{
+		menuOptions[selectedItem].setFillColor(sf::Color::White);
+		selectedItem++;
+		menuOptions[selectedItem].setFillColor(sf::Color::Red);
+	}
 }
 
 /**
@@ -93,7 +93,7 @@ bool Menu::update(float dt)
  * Draws menu objects on screen
  * @param window window we draw on
  */
-void Menu::draw(sf::RenderWindow & window)
+void Menu::draw(sf::RenderWindow& window)
 {
 	window.draw(sBackground);
 	for (int i = 0; i < 2; i++)

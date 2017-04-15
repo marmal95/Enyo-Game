@@ -6,15 +6,15 @@
 
 Application::Application(const sf::Vector2i& windowDimension)
 	: window(sf::VideoMode(static_cast<uint32_t>(windowDimension.x), static_cast<uint32_t>(windowDimension.y)),
-			 "The Enyo Game", sf::Style::Default),
+		"The Enyo Game", sf::Style::Default),
 	windowDimension(windowDimension), pStage(nullptr)
 {
 	window.setVerticalSyncEnabled(true);
-	window.setFramerateLimit(60);
 }
 
 void Application::run()
 {
+	sf::Clock clock;
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -33,8 +33,11 @@ void Application::run()
 				pStage->handleUserInput(event.key.code, false);
 		}
 
-		if (!pStage->update(3))
-			break;
+		{
+			float dt = clock.restart().asSeconds();
+			if (!pStage->update(dt))
+				break;
+		}
 
 		window.clear();
 		pStage->draw(window);
@@ -53,17 +56,17 @@ void Application::runMenuStage()
 	Menu* menuPtr = dynamic_cast<Menu*>(pStage.get());
 	switch (menuPtr->getSelectedOption())
 	{
-	case 0:
-		runPlayStage();
-		break;
+		case 0:
+			runPlayStage();
+			break;
 
-	case 1:
-		pStage.reset();
-		window.close();
-		break;
+		case 1:
+			pStage.reset();
+			window.close();
+			break;
 
-        default:break;
-    }
+		default:break;
+	}
 }
 
 void Application::runPlayStage()

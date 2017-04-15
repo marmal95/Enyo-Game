@@ -2,12 +2,9 @@
 
 #include "Application.h"
 
-
+#include <iostream>
 int main()
 {
-	// For Debug
-	srand(unsigned(time(NULL)));
-
 	// Game Window Dimension
 	const int game_width = 1920;
 	const int game_height = 1200;
@@ -15,5 +12,6 @@ int main()
 	Application app(sf::Vector2i(game_width, game_height));
 	app.runMenuStage();
 
-	return 0;
+
+	return EXIT_SUCCESS;
 }

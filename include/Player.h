@@ -8,8 +8,10 @@ private:
     bool moving;
 
 public:
-    Player(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle = 0, const float &radius = 1);
-    void update() override;
+    Player(const GamePlay* window, const Animation& animation, const sf::Vector2f& position,
+		const float& angle, const float& radius);
+
+    void update(float dt) override;
     bool isMoving() const;
     void setMoving(bool moving);
 };

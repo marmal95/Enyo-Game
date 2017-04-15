@@ -19,20 +19,17 @@ Animation::Animation()
  * @param count number of frames in texture
  * @param speed animation speed
  */
-Animation::Animation(const sf::Texture &t, const sf::Vector2f& position,
-                     const int &w, const int &h, const int &count, const float &speed)
+Animation::Animation(const sf::Texture& t, const sf::Vector2f& position,
+                     const int& w, const int& h, const int& count, const float& speed)
     : frame(0), speed(speed)
 {
     for(int i = 0; i < count; ++i)
-        frames.push_back(sf::IntRect(
-			static_cast<int>(position.x + i * w),
-			static_cast<int>(position.y), w, h));
+        frames.push_back(sf::IntRect(static_cast<int>(position.x + i * w), static_cast<int>(position.y), w, h));
 
     sprite.setTexture(t);
     sprite.setOrigin(static_cast<float>(w/2), static_cast<float>(h/2));
     sprite.setTextureRect(frames[0]);
 }
-
 
 Animation::~Animation()
 {}
@@ -58,8 +55,7 @@ const sf::Sprite& Animation::getSprite() const
 void Animation::update()
 {
     frame += speed;
-    //if(frame > 0 && frame < frames.size())
-    //    sprite.setTextureRect(frames[static_cast<uint32_t>(frame)]);
+
     size_t n = frames.size();
     if(frame >= n)
         frame -= n;

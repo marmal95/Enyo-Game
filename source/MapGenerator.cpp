@@ -10,20 +10,19 @@
  * @param y - Y size of map
  * @param seedStr - text that defines map
 */
-MapGenerator::MapGenerator(const uint32_t & x, const uint32_t & y, const std::string & seedStr, uint8_t steps)
+MapGenerator::MapGenerator(const uint32_t& x, const uint32_t& y, const std::string& seedStr, uint8_t steps)
 	: fields(x*y), seed(std::atoi(seedStr.c_str())), sizeX(x), sizeY(y), elementSize(50)
-{	
+{
 	initialize();
 
-	for(uint8_t i = 0; i < steps; ++i)
+	for (uint8_t i = 0; i < steps; ++i)
 		doSimulation();
 
-
-	for (uint32_t j = 0;j < y; ++j)
+	for (uint32_t j = 0; j < y; ++j)
 	{
 		for (uint32_t i = 0; i < x; ++i)
 		{
-			if(fields[j*x+i] == MapField::Empty)
+			if (fields[j*x + i] == MapField::Empty)
 				std::cout << " ";
 			else
 				std::cout << "X";
@@ -53,12 +52,12 @@ inline uint32_t MapGenerator::getY() const
 */
 void MapGenerator::initialize()
 {
-//	srand(seed);
+	//	srand(seed);
 	int toss = 0;
 	for (auto& field : fields)
 	{
-		toss = rand()%7;
-		if(toss == 1)
+		toss = rand() % 7;
+		if (toss == 1)
 			field = MapField::Wall;
 		else
 			field = MapField::Empty;
@@ -73,8 +72,9 @@ void MapGenerator::doSimulation()
 	std::vector<MapField> newMap(sizeX*sizeY);
 	uint32_t mapSize = sizeX;
 
-	auto nbh = [&newMap, mapSize](uint32_t x, uint32_t y)->MapField& {
-		return newMap[y*mapSize +x];
+	auto nbh = [&newMap, mapSize](uint32_t x, uint32_t y) -> MapField&
+	{
+		return newMap[y*mapSize + x];
 	};
 
 	int aliveNbh;
@@ -82,13 +82,13 @@ void MapGenerator::doSimulation()
 	{
 		for (uint32_t i = 0; i < sizeX; ++i)
 		{
-			aliveNbh = countAlive(i,j);
+			aliveNbh = countAlive(i, j);
 			if (getField(i, j) == MapField::Wall)
 			{
-				if(aliveNbh < 3)
-					nbh(i,j) = MapField::Empty;
+				if (aliveNbh < 3)
+					nbh(i, j) = MapField::Empty;
 				else
-					nbh(i,j) = MapField::Wall;
+					nbh(i, j) = MapField::Wall;
 			}
 			else
 			{
@@ -121,8 +121,7 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y) const
 				continue;
 			else if (nbhX < 0 || nbhX >= static_cast<int>(sizeX) || nbhY < 0 || nbhY >= static_cast<int>(sizeY))
 				++alive;
-			else
-				if(getField(static_cast<uint32_t>(nbhX), static_cast<uint32_t>(nbhY)) != MapField::Empty)
+			else if (getField(static_cast<uint32_t>(nbhX), static_cast<uint32_t>(nbhY)) != MapField::Empty)
 					++alive;
 		}
 	}
@@ -133,17 +132,17 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y) const
 sf::Vector2f MapGenerator::getStartPoint() const
 {
 	bool found = false;
-	uint32_t x,y;
-	while(!found)
+	uint32_t x, y;
+	while (!found)
 	{
-		x = rand()%sizeX;
-		y = rand()%sizeY;
-		
-		if(countAlive(x,y) == 0)
+		x = rand() % sizeX;
+		y = rand() % sizeY;
+
+		if (countAlive(x, y) == 0)
 			found = true;
 	}
 
-	return sf::Vector2f(static_cast<float>(x*elementSize),static_cast<float>(y*elementSize));
+	return sf::Vector2f(static_cast<float>(x*elementSize), static_cast<float>(y*elementSize));
 
 }
 
@@ -169,7 +168,7 @@ MapField MapGenerator::getField(const uint32_t& x, const uint32_t& y) const
 	return fields[y*sizeX + x];
 }
 
-void MapGenerator::setField (const uint32_t & x, const uint32_t & y, const MapField & field)
+void MapGenerator::setField(const uint32_t& x, const uint32_t& y, const MapField& field)
 {
 	fields[static_cast<uint32_t>(y / elementSize)*sizeX + static_cast<uint32_t>(x / elementSize)] = field;
 }
@@ -180,7 +179,7 @@ void MapGenerator::setField (const uint32_t & x, const uint32_t & y, const MapFi
 * @param y - y axis
 * @return bool if is empty
 */
-bool MapGenerator::isEmpty(const float & x, const float & y) const
+bool MapGenerator::isEmpty(const float& x, const float& y) const
 {
-	return (getField(static_cast<uint32_t>(x/elementSize), static_cast<uint32_t>(y / elementSize)) == MapField::Empty);
+	return (getField(static_cast<uint32_t>(x / elementSize), static_cast<uint32_t>(y / elementSize)) == MapField::Empty);
 }

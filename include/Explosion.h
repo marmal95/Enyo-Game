@@ -7,9 +7,9 @@
 class Explosion : public Entity
 {
 public:
-    Explosion(const GamePlay* window, const Animation &animation, const sf::Vector2f& position,
-              const float &angle = 0, const float &radius = 1);
-    void update() override ;
+    Explosion(const GamePlay* window, const Animation& animation, const sf::Vector2f& position,
+              const float& angle, const float& radius);
+    void update(float dt) override;
 };
 
 #endif //ENYO_EXPLOSION_H

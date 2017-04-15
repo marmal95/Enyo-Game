@@ -10,22 +10,21 @@
  * @param angle direction move angle
  * @param radius bullet radius
  */
-Bullet::Bullet(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle, const float &radius)
-        : Entity(window, "Bullet", animation, position, angle, radius)
-{}
+Bullet::Bullet(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, const float& angle, const float& radius)
+	: Entity(window, "Bullet", animation, position, angle, radius)
+{
+	mVelocity.x = static_cast<float>(cos(getRotation() * M_PI / 180.) * 12);
+	mVelocity.y = static_cast<float>(sin(getRotation() * M_PI / 180.) * 12);
+}
 
 /**
  * Updates Bullet position.
  */
-void Bullet::update()
+void Bullet::update(float dt)
 {
-	Entity::update();
-
-	mVelocity.x = static_cast<float>(cos(getRotation() * M_PI/180.) * 12);
-	mVelocity.y = static_cast<float>(sin(getRotation() * M_PI/180.) * 12);
-    // angle+=rand()%6-3;
+	Entity::update(dt);
 	move(mVelocity);
 
-    if (getPosition().x > window->getDimension().x || getPosition().x < 0 || getPosition().y > window->getDimension().y || getPosition().y < 0)
-        life = 0;
+	if (getPosition().x > window->getDimension().x || getPosition().x < 0 || getPosition().y > window->getDimension().y || getPosition().y < 0)
+		life = 0;
 }

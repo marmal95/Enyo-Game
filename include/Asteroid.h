@@ -7,8 +7,9 @@
 class Asteroid : public Entity
 {
 public:
-    Asteroid(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle = 0, const float &radius = 1);
-    void update() override;
+    Asteroid(const GamePlay* window, const Animation& animation, const sf::Vector2f& position,
+		const float& angle, const float& radius);
+    void update(float dt) override;
 };
 
 #endif //ENYO_ASTEROID_H

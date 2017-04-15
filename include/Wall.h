@@ -8,8 +8,9 @@
 class Wall : public Entity
 {
 public:
-	Wall(const GamePlay* window, const Animation &animation, const sf::Vector2f& position, const float &angle = 1, const float &sizeX = 1);
-	void update() override;
+	Wall(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, 
+		const float& angle, const float& sizeX);
+	void update(float dt) override;
 };
 
 #endif // !ENYO_WALL

@@ -5,7 +5,8 @@
 #include <string>
 #include "Entity.h"
 
-enum class MapField{
+enum class MapField
+{
 	Empty,
 	Wall,
 	Asteroid

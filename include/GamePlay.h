@@ -1,11 +1,14 @@
 #pragma once
-#include "ResourceHolder.hpp"
-#include "Id.h"
-#include "Animation.h"
-#include "Entity.h"
-#include "Player.h"
-#include "MapGenerator.h"
 #include "GameStage.h"
+
+#include "ResourceHolder.hpp"
+#include "MapGenerator.h"
+#include "Id.h"
+#include "Bullet.h"
+#include "Asteroid.h"
+#include "Player.h"
+
+
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Audio/Sound.hpp>
@@ -13,6 +16,7 @@
 #include <SFML/Window/Keyboard.hpp>
 
 #include <list>
+#include <random>
 
 /**
  * GamePlay class controls whole play in game.
@@ -51,21 +55,31 @@ private:
 	// Pointer to Player Aircraft
 	Player* playerAircraft;
 
+	// ---------------------------
+
+	std::mt19937 mt;
+	std::uniform_int_distribution<uint32_t> randDist;
+
 private:
 	void initializeWold();
 	void buildScene();
 	void addWalls();
 
 	void createPlayer();
-	void createAsteroids(const uint32_t& count);
-	void createSmallAsteroids(const uint32_t& count);
+	void createAsteroids(ID asteroidId, const uint32_t& count);
 
 	void checkPlayerMove();
 	void checkCollisions();
-	void checkUpdateEntities();
+	void checkUpdateEntities(float dt);
+	void checkRandomAsteroid();
 	void checkSounds();
 
 	bool isCollide(const Entity* const a, const Entity* const b);
+	void makeBounce(Entity* const a, Entity* const b);
+
+	void asteroidVsBullet(Entity* const a, Entity* const b);
+	void playerVsAsteroid(Entity* const a, Entity* const b);
+	void playerVsWall(Entity* const a, Entity* const b);
 
 	bool canSpawn(const float& x, const float& y, const float& radius);
 
@@ -74,7 +88,7 @@ public:
 
 	virtual void init() override;
 	virtual bool update(float dt) override;
-	virtual void draw(sf::RenderWindow &window) override;
+	virtual void draw(sf::RenderWindow& window) override;
 	virtual void release() override;
 	virtual void handleUserInput(sf::Keyboard::Key key, bool pressed) override;
 
