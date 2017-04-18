@@ -9,8 +9,10 @@
  * @param sizeX wall size
  */
 Wall::Wall(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, const float& angle, const float& sizeX)
-	: Entity(window, "Wall", animation, position, angle, sizeX)
-{}
+	: Entity(window, animation, position, angle, sizeX)
+{
+	id = EntityId::Wall;
+}
 
 /**
  * Updates Wall object.

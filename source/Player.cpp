@@ -12,8 +12,10 @@
  * @param radius player radius
  */
 Player::Player(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, const float& angle, const float& radius)
-	: Entity(window, "Player", animation, position, angle, radius)
-{}
+	: Entity(window, animation, position, angle, radius)
+{
+	id = EntityId::Player;
+}
 
 /**
  * Updates Player Position.

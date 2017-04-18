@@ -14,7 +14,7 @@
 class Menu : public GameStage
 {
 private:
-    size_t textNumber;
+	size_t textNumber;
     int selectedItem;
     sf::Text menuOptions[2];
 

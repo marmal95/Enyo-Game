@@ -1,6 +1,4 @@
-
-#ifndef ENYO_RESOURCEHOLDER_H
-#define ENYO_RESOURCEHOLDER_H
+#pragma once
 
 #include <SFML/Audio/SoundBuffer.hpp>
 
@@ -16,7 +14,7 @@ private:
 
 public:
     ResourceHolder();
-    void load(Identifier id, const std::string& filename, bool smooth = false);
+    void load(Identifier id, const std::string& filename);
     void load(Identifier id, std::unique_ptr<Resource>&& resource);
     Resource& getResource(Identifier id);
     Resource& getResource(Identifier id) const;
@@ -28,7 +26,7 @@ ResourceHolder<Resource, Identifier>::ResourceHolder()
 {}
 
 template <typename Resource, typename Identifier>
-void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename, bool smooth)
+void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string& filename)
 {
     auto uPtr = std::make_unique<Resource>();
     if(!uPtr->loadFromFile(filename))
@@ -62,5 +60,3 @@ Resource& ResourceHolder<Resource, Identifier>::getResource(Identifier id) const
 
     return *found->second;
 }
-
-#endif //ENYO_RESOURCEHOLDER_H

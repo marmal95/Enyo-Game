@@ -19,5 +19,15 @@ enum class ID
 	Wall
 };
 
+enum class EntityId
+{
+	Entity,
+	Asteroid,
+	Bullet,
+	Explosion,
+	Player,
+	Wall
+};
+
 
 #endif //ENYO_ID_H

@@ -1,4 +1,3 @@
-
 #include "Entity.h"
 
 #include <SFML/Graphics/CircleShape.hpp>
@@ -12,19 +11,13 @@
  * @param angle direction angle
  * @param radius object radius
  */
-Entity::Entity(const GamePlay* window, const std::string& name, const Animation& animation,
+Entity::Entity(const GamePlay* window, const Animation& animation,
 	const sf::Vector2f& position, const float& angle, const float& radius)
-	: mVelocity(0, 0), radius(radius), life(true), name(name), anim(animation), window(window)
+	: mVelocity(0, 0), radius(radius), life(true), id(EntityId::Entity), anim(animation), window(window)
 {
 	setPosition(position);
 	setRotation(angle);
 }
-
-/**
- * Destructs Entity Object.
- */
-Entity::~Entity()
-{}
 
 /**
  * {@inherit}
@@ -63,6 +56,11 @@ float Entity::getRadius() const
 	return radius;
 }
 
+EntityId Entity::getId() const
+{
+	return this->id;
+}
+
 /**
  * Gets Entity life
  * @return true if alive, false - otherwise
@@ -82,20 +80,11 @@ Animation& Entity::getAnimation()
 }
 
 /**
- * Gets Entity name
- * @return name
- */
-const std::string& Entity::getName() const
-{
-	return name;
-}
-
-/**
  * Set Entity Animation
  * @param animation entity animation
  */
-void Entity::setAnimation(const Animation& animation
-) {
+void Entity::setAnimation(const Animation& animation)
+{
 	anim = animation;
 }
 

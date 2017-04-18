@@ -31,9 +31,6 @@ Animation::Animation(const sf::Texture& t, const sf::Vector2f& position,
     sprite.setTextureRect(frames[0]);
 }
 
-Animation::~Animation()
-{}
-
 void Animation::setSpritePos(const float& x_pos, const float& y_pos)
 {
     sprite.setPosition(x_pos, y_pos);

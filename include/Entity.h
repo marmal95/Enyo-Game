@@ -4,6 +4,7 @@
 
 #include "SceneNode.h"
 #include "Animation.h"
+#include "Id.h"
 
 #include <string>
 
@@ -16,6 +17,9 @@ class GamePlay;
 class Entity : public SceneNode
 {
 protected:
+	// Entity's Force
+	sf::Vector2f mForce;
+
 	// Entity's Actual Velocity
 	sf::Vector2f mVelocity;
 
@@ -25,8 +29,8 @@ protected:
 	// Indicates if entity is alive
     bool life;
 
-	// Entity's Name
-    std::string name;
+	// Entity's Id
+	EntityId id;
 
 	// Animated Sprite 
     Animation anim;
@@ -35,9 +39,8 @@ protected:
     const GamePlay* window;
 
 public:
-    Entity(const GamePlay* window, const std::string& name, const Animation& animation,
+    Entity(const GamePlay* window, const Animation& animation,
           const sf::Vector2f& position, const float& angle, const float& radius);
-    ~Entity();
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void update(float dt) override;
@@ -48,9 +51,11 @@ public:
 	sf::Vector2f& getVelocity();
 
     float getRadius() const;
-    bool getLife() const;
+	EntityId getId() const;
+
     Animation& getAnimation();
-    const std::string& getName() const;
     void setAnimation(const Animation& animation);
+
     void setLife(bool life);
+	bool getLife() const;
 };

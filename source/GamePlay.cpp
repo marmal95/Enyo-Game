@@ -1,9 +1,5 @@
 #include "MapGenerator.h"
-
 #include "Explosion.h"
-
-
-
 #include "GamePlay.h"
 #include "Wall.h"
 
@@ -124,10 +120,10 @@ void GamePlay::initializeWold()
 	mTextureHolder.load(ID::RockBig, "images/rock.png");
 	mTextureHolder.load(ID::RockSmall, "images/rock_small.png");
 	mTextureHolder.load(ID::BulletBlue, "images/fire_blue.png");
-	mTextureHolder.load(ID::Spaceship, "images/spaceship.png", true);
+	mTextureHolder.load(ID::Spaceship, "images/spaceship.png");
 	mTextureHolder.load(ID::SpaceshipFly, "images/spaceship.png");
 	mTextureHolder.load(ID::ExplosionShip, "images/type_B.png");
-	mTextureHolder.load(ID::SpaceBackground, "images/background.jpg", true);
+	mTextureHolder.load(ID::SpaceBackground, "images/background.jpg");
 	mTextureHolder.load(ID::Wall, "images/wall.png");
 
 	sBackground.setTexture(mTextureHolder.getResource(ID::SpaceBackground));
@@ -263,17 +259,17 @@ void GamePlay::checkCollisions()
 	{
 		for (auto& b : entities)
 		{
-			if (a->getName() == "Asteroid" && b->getName() == "Bullet" && isCollide(a.get(), b.get()))
+			if (a->getId() == EntityId::Asteroid && b->getId() == EntityId::Bullet && isCollide(a.get(), b.get()))
 				asteroidVsBullet(a.get(), b.get());
-			else if (a->getName() == "Player" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()))
+			else if (a->getId() == EntityId::Player && b->getId() == EntityId::Asteroid && isCollide(a.get(), b.get()))
 				playerVsAsteroid(a.get(), b.get());
-			else if (a->getName() == "Player" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+			else if (a->getId() == EntityId::Player && b->getId() == EntityId::Wall && isCollide(a.get(), b.get()))
 				playerVsWall(a.get(), b.get());
-			else if (a->getName() == "Asteroid" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+			else if (a->getId() == EntityId::Asteroid && b->getId() == EntityId::Wall && isCollide(a.get(), b.get()))
 				makeBounce(a.get(), b.get());
-			else if (a->getName() == "Asteroid" && b->getName() == "Asteroid" && isCollide(a.get(), b.get()) && a != b)
-				makeBounce(a.get(), b.get());
-			else if (a->getName() == "Bullet" && b->getName() == "Wall" && isCollide(a.get(), b.get()))
+			else if (a->getId() == EntityId::Asteroid && b->getId() == EntityId::Asteroid && isCollide(a.get(), b.get()) && a != b)
+				 makeBounce(a.get(), b.get());
+			else if (a->getId() == EntityId::Bullet && b->getId() == EntityId::Wall && isCollide(a.get(), b.get()))
 				a->setLife(false);
 		}
 	}
@@ -297,7 +293,7 @@ void GamePlay::checkUpdateEntities(float dt)
 		e->getAnimation().update();
 
 		// Remove Explosion if finished playing
-		if (e->getName() == "Explosion" && e->getAnimation().finished())
+		if (e->getId() == EntityId::Explosion && e->getAnimation().finished())
 			e->setLife(false);
 
 		// Erase dead objects
