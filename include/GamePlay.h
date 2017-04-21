@@ -47,7 +47,7 @@ private:
 	std::list<sf::Sound> qSounds;
 
 	// Entities List
-	std::list<std::unique_ptr<Entity>> entities;
+	std::vector<std::unique_ptr<Entity>> entities;
 
 	// Background Sprite
 	sf::Sprite sBackground;

@@ -7,6 +7,8 @@
 
 #include <cmath>
 
+#include <iostream>
+
 /**
  * Initializes GamePlay
  * @param window window we play on
@@ -24,7 +26,9 @@ GamePlay::GamePlay(sf::RenderWindow& window, const sf::Vector2i& dimension)
 	generator(39, 24, "z", 1),
 	// Random Generator
 	mt(std::random_device()()), randDist()
-{}
+{
+	entities.reserve(500);
+}
 
 /**
  * Initializes GamePlay.
@@ -172,7 +176,7 @@ void GamePlay::buildScene()
 	createAsteroids(ID::RockBig, 15);
 
 	// Create Small Asteroids
-	createAsteroids(ID::RockSmall, 10);
+	createAsteroids(ID::RockSmall, 15);
 }
 
 /**
@@ -280,8 +284,7 @@ void GamePlay::checkCollisions()
  */
 void GamePlay::checkUpdateEntities(float dt)
 {
-	auto end = entities.end();
-	for (auto i = entities.begin(); i != end;)
+	for (auto i = entities.begin(); i != entities.end();)
 	{
 		// Get Entity
 		auto e = i->get();
@@ -298,10 +301,15 @@ void GamePlay::checkUpdateEntities(float dt)
 
 		// Erase dead objects
 		if (!e->getLife())
-			i = entities.erase(i);
+		{
+			std::swap(*i, *(entities.end() - 1));
+			entities.erase(entities.end() - 1);
+		}
 		else
 			++i;
 	}
+
+	std::cout << entities.size() << std::endl;
 }
 
 /**
@@ -309,14 +317,7 @@ void GamePlay::checkUpdateEntities(float dt)
  */
 void GamePlay::checkSounds()
 {
-	auto end = qSounds.end();
-	for (auto i = qSounds.begin(); i != end;)
-	{
-		if (i->getStatus() == sf::Sound::Stopped)
-			i = qSounds.erase(i);
-		else
-			++i;
-	}
+	qSounds.remove_if([](auto& snd) {return snd.getStatus() == sf::Sound::Stopped; });
 }
 
 /**
@@ -339,7 +340,7 @@ void GamePlay::makeBounce(Entity* const a, Entity* const b)
 	float vY = a->getVelocity().y;
 
 	// Velocity Vector Norm
-	float vLen = static_cast<float>(sqrt(vX*vX + vY*vY));
+//	float vLen = static_cast<float>(sqrt(vX*vX + vY*vY));
 
 	// Normal Line
 	float nX = b->getPosition().x - a->getPosition().x;
