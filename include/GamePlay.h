@@ -8,8 +8,6 @@
 #include "Asteroid.h"
 #include "Player.h"
 
-
-
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/Texture.hpp>
