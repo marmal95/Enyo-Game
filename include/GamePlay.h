@@ -6,7 +6,9 @@
 #include "Id.h"
 #include "Bullet.h"
 #include "Asteroid.h"
+#include "Wall.h"
 #include "Player.h"
+#include "Explosion.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Audio/Sound.hpp>
@@ -45,13 +47,19 @@ private:
 	std::list<sf::Sound> qSounds;
 
 	// Entities List
-	std::vector<std::unique_ptr<Entity>> entities;
+//	std::vector<std::unique_ptr<Entity>> entities;
+
+	// Entities Objects Vectors
+	std::vector<Wall> wallVec;
+	std::vector<Explosion> exploVec;
+	std::vector<Asteroid> asteroidVec;
+	std::vector<Bullet> bulletVec;
 
 	// Background Sprite
 	sf::Sprite sBackground;
 
 	// Pointer to Player Aircraft
-	Player* playerAircraft;
+	std::unique_ptr<Player> playerAircraft;
 
 	// ---------------------------
 
@@ -72,12 +80,12 @@ private:
 	void checkRandomAsteroid();
 	void checkSounds();
 
-	bool isCollide(const Entity* const a, const Entity* const b);
-	void makeBounce(Entity* const a, Entity* const b);
+	bool isCollide(const Entity& a, const Entity& b);
+	void makeBounce(Entity& a, Entity& b);
 
-	void asteroidVsBullet(Entity* const a, Entity* const b);
-	void playerVsAsteroid(Entity* const a, Entity* const b);
-	void playerVsWall(Entity* const a, Entity* const b);
+	void asteroidVsBullet(Entity& a, Entity& b);
+	void playerVsAsteroid(Entity& a, Entity& b);
+	void playerVsWall(Entity& a, Entity& b);
 
 	bool canSpawn(const float& x, const float& y, const float& radius);
 

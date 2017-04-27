@@ -1,10 +1,8 @@
 #include "MapGenerator.h"
 #include "Explosion.h"
 #include "GamePlay.h"
-#include "Wall.h"
 
 #include <SFML/Window/Event.hpp>
-
 #include <cmath>
 
 #include <iostream>
@@ -21,13 +19,16 @@ GamePlay::GamePlay(sf::RenderWindow& window, const sf::Vector2i& dimension)
 	// Resources
 	mTextureHolder(), mAnimationHolder(), mSoundHolder(),
 	// Additional Containers
-	qSounds(), entities(), sBackground(),
+	qSounds(), sBackground(),
 	// Map Generator
 	generator(39, 24, "z", 1),
 	// Random Generator
 	mt(std::random_device()()), randDist()
 {
-	entities.reserve(500);
+	wallVec.reserve(300);
+	exploVec.reserve(30);
+	asteroidVec.reserve(50);
+	bulletVec.reserve(50);
 }
 
 /**
@@ -69,8 +70,19 @@ void GamePlay::draw(sf::RenderWindow& window)
 	window.draw(sBackground);
 
 	// Draw all entities
-	for (const auto& i : entities)
-		window.draw(*i);
+	for (const auto& i : wallVec)
+		window.draw(i);
+
+	for (const auto& i : exploVec)
+		window.draw(i);
+
+	for (const auto& i : asteroidVec)
+		window.draw(i);
+
+	for (const auto& i : bulletVec)
+		window.draw(i);
+
+	window.draw(*playerAircraft.get());
 }
 
 /**
@@ -93,8 +105,8 @@ void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
 		case sf::Keyboard::Space:
 			if (pressed)
 			{
-				entities.push_back(std::make_unique<Bullet>(this, mAnimationHolder.getResource(ID::BulletBlue),
-					sf::Vector2f(playerAircraft->getPosition().x, playerAircraft->getPosition().y), playerAircraft->getRotation(), 10.F));
+				bulletVec.emplace_back(this, mAnimationHolder.getResource(ID::BulletBlue),
+					sf::Vector2f(playerAircraft->getPosition().x, playerAircraft->getPosition().y), playerAircraft->getRotation(), 10.F);
 
 				qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BulletBlueSound)));
 				qSounds.back().play();
@@ -187,8 +199,8 @@ void GamePlay::addWalls()
 	for (int i = 0; i < 24; ++i)
 		for (int j = 0; j < 39; ++j)
 			if (generator.getField(static_cast<uint32_t>(j), static_cast<uint32_t>(i)) == MapField::Wall)
-				entities.push_back(std::make_unique<Wall>(
-					this, mAnimationHolder.getResource(ID::Wall), sf::Vector2f(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0.F, 25.F));
+				wallVec.emplace_back(
+					this, mAnimationHolder.getResource(ID::Wall), sf::Vector2f(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0.F, 25.F);
 }
 
 /**
@@ -196,9 +208,7 @@ void GamePlay::addWalls()
  */
 void GamePlay::createPlayer()
 {
-	auto player = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(), 0.F, 20.F);
-	playerAircraft = player.get();
-	entities.push_back(std::move(player));
+	playerAircraft = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(), 0.F, 20.F);
 }
 
 void GamePlay::createAsteroids(ID asteroidId, const uint32_t& count)
@@ -224,7 +234,7 @@ void GamePlay::createAsteroids(ID asteroidId, const uint32_t& count)
 
 		// Spawn Asteroid
 		if (canSpawn(pos.x, pos.y, radius))
-			entities.push_back(std::make_unique<Asteroid>(this, mAnimationHolder.getResource(asteroidId), pos, angle, radius));
+			asteroidVec.emplace_back(this, mAnimationHolder.getResource(asteroidId), pos, angle, radius);
 		else
 			continue;
 	}
@@ -259,24 +269,39 @@ void GamePlay::checkPlayerMove()
  */
 void GamePlay::checkCollisions()
 {
-	for (auto& a : entities)
-	{
-		for (auto& b : entities)
-		{
-			if (a->getId() == EntityId::Asteroid && b->getId() == EntityId::Bullet && isCollide(a.get(), b.get()))
-				asteroidVsBullet(a.get(), b.get());
-			else if (a->getId() == EntityId::Player && b->getId() == EntityId::Asteroid && isCollide(a.get(), b.get()))
-				playerVsAsteroid(a.get(), b.get());
-			else if (a->getId() == EntityId::Player && b->getId() == EntityId::Wall && isCollide(a.get(), b.get()))
-				playerVsWall(a.get(), b.get());
-			else if (a->getId() == EntityId::Asteroid && b->getId() == EntityId::Wall && isCollide(a.get(), b.get()))
-				makeBounce(a.get(), b.get());
-			else if (a->getId() == EntityId::Asteroid && b->getId() == EntityId::Asteroid && isCollide(a.get(), b.get()) && a != b)
-				 makeBounce(a.get(), b.get());
-			else if (a->getId() == EntityId::Bullet && b->getId() == EntityId::Wall && isCollide(a.get(), b.get()))
-				a->setLife(false);
-		}
-	}
+	// Asteroid Vs Asteroid
+	for (auto& a : asteroidVec)
+		for (auto& b : asteroidVec)
+			if (&a != &b && isCollide(a, b))
+				makeBounce(a, b);
+
+	// Asteroid Vs Wall
+	for (auto& a : asteroidVec)
+		for (auto& b : wallVec)
+			if(isCollide(a, b))
+				makeBounce(a, b);
+
+	// Asteroid Vs Bullet
+	for (auto& a : asteroidVec)
+		for (auto& b : bulletVec)
+			if(isCollide(a, b))
+				asteroidVsBullet(a, b);
+
+	// Bullet Vs Wall
+	for (auto& a : bulletVec)
+		for (auto& b : wallVec)
+			if(isCollide(a, b))
+				a.setLife(false);
+
+	// Player vs Asteroid
+	for(auto& a : asteroidVec)
+		if(isCollide(*playerAircraft.get(), a))
+			playerVsAsteroid(*playerAircraft.get(), a);
+
+	// Player vs Wall
+	for (auto& a : wallVec)
+		if (isCollide(*playerAircraft.get(), a))
+			playerVsAsteroid(*playerAircraft.get(), a);
 }
 
 /**
@@ -284,32 +309,66 @@ void GamePlay::checkCollisions()
  */
 void GamePlay::checkUpdateEntities(float dt)
 {
-	for (auto i = entities.begin(); i != entities.end();)
+	for (auto i = wallVec.begin(); i != wallVec.end();)
 	{
-		// Get Entity
-		auto e = i->get();
+		i->update(dt);
+		i->getAnimation().update();
 
-		// Update Move
-		e->update(dt);
-
-		// Update Animation
-		e->getAnimation().update();
-
-		// Remove Explosion if finished playing
-		if (e->getId() == EntityId::Explosion && e->getAnimation().finished())
-			e->setLife(false);
-
-		// Erase dead objects
-		if (!e->getLife())
+		if (!i->getLife())
 		{
-			std::swap(*i, *(entities.end() - 1));
-			entities.erase(entities.end() - 1);
+			std::swap(*i, *(wallVec.end() - 1));
+			wallVec.erase(wallVec.end() - 1);
 		}
 		else
 			++i;
 	}
 
-	std::cout << entities.size() << std::endl;
+	for (auto i = exploVec.begin(); i != exploVec.end();)
+	{
+		i->update(dt);
+		i->getAnimation().update();
+
+		if (i->getAnimation().finished())
+			i->setLife(false);
+
+		if (!i->getLife())
+		{
+			std::swap(*i, *(exploVec.end() - 1));
+			exploVec.erase(exploVec.end() - 1);
+		}
+		else
+			++i;
+	}
+
+
+	for (auto i = asteroidVec.begin(); i != asteroidVec.end();)
+	{
+		i->update(dt);
+		i->getAnimation().update();
+
+		if (!i->getLife())
+		{
+			std::swap(*i, *(asteroidVec.end() - 1));
+			asteroidVec.erase(asteroidVec.end() - 1);
+		}
+		else
+			++i;
+	}
+
+
+	for (auto i = bulletVec.begin(); i != bulletVec.end();)
+	{
+		i->update(dt);
+		i->getAnimation().update();
+
+		if (!i->getLife())
+		{
+			std::swap(*i, *(bulletVec.end() - 1));
+			bulletVec.erase(bulletVec.end() - 1);
+		}
+		else
+			++i;
+	}
 }
 
 /**
@@ -326,25 +385,25 @@ void GamePlay::checkSounds()
  * @param b second entity
  * @return true - if there was collision, false - otherwise
  */
-bool GamePlay::isCollide(const Entity* const a, const Entity* const b)
+bool GamePlay::isCollide(const Entity& a, const Entity& b)
 {
-	return (b->getPosition().x - a->getPosition().x) * (b->getPosition().x - a->getPosition().x) +
-		(b->getPosition().y - a->getPosition().y) * (b->getPosition().y - a->getPosition().y) <
-		(a->getRadius() + b->getRadius()) * (a->getRadius() + b->getRadius());
+	return (b.getPosition().x - a.getPosition().x) * (b.getPosition().x - a.getPosition().x) +
+		(b.getPosition().y - a.getPosition().y) * (b.getPosition().y - a.getPosition().y) <
+		(a.getRadius() + b.getRadius()) * (a.getRadius() + b.getRadius());
 }
 
-void GamePlay::makeBounce(Entity* const a, Entity* const b)
+void GamePlay::makeBounce(Entity& a, Entity& b)
 {
 	// Current Velocity Vector
-	float vX = a->getVelocity().x;
-	float vY = a->getVelocity().y;
+	float vX = a.getVelocity().x;
+	float vY = a.getVelocity().y;
 
 	// Velocity Vector Norm
 //	float vLen = static_cast<float>(sqrt(vX*vX + vY*vY));
 
 	// Normal Line
-	float nX = b->getPosition().x - a->getPosition().x;
-	float nY = b->getPosition().y - a->getPosition().y;
+	float nX = b.getPosition().x - a.getPosition().x;
+	float nY = b.getPosition().y - a.getPosition().y;
 
 	// Normalize N - vector
 	float nLen = static_cast<float>(sqrt(nX * nX + nY * nY));
@@ -358,30 +417,30 @@ void GamePlay::makeBounce(Entity* const a, Entity* const b)
 	float nVX = vX - 2 * dotProd_VN * nX;
 	float nVY = vY - 2 * dotProd_VN * nY;
 
-	a->setVelocity(nVX, nVY);
+	a.setVelocity(nVX, nVY);
 }
 
-void GamePlay::asteroidVsBullet(Entity* const a, Entity* const b)
+void GamePlay::asteroidVsBullet(Entity& a, Entity& b)
 {
-	a->setLife(false);
-	b->setLife(false);
+	a.setLife(false);
+	b.setLife(false);
 
 	// Play Sound
-	if (a->getRadius() > 20.f)
+	if (a.getRadius() > 20.f)
 		qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
 	else
 		qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::SmallExplosionSound)));
 	qSounds.back().play();
 
-	entities.push_back(std::make_unique<Explosion>(
-		this, mAnimationHolder.getResource(ID::Explosion), sf::Vector2f(a->getPosition().x, a->getPosition().y), 0.f, 0.f));
+	exploVec.emplace_back(
+		this, mAnimationHolder.getResource(ID::Explosion), sf::Vector2f(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
 }
 
-void GamePlay::playerVsAsteroid(Entity* const a, Entity* const b)
+void GamePlay::playerVsAsteroid(Entity& a, Entity& b)
 {
-	b->setLife(false);
-	entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip),
-		sf::Vector2f(a->getPosition().x, a->getPosition().y), 0.f, 0.f));
+	b.setLife(false);
+	exploVec.emplace_back(this, mAnimationHolder.getResource(ID::ExplosionShip),
+		sf::Vector2f(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
 
 	qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
 	qSounds.back().play();
@@ -390,10 +449,10 @@ void GamePlay::playerVsAsteroid(Entity* const a, Entity* const b)
 	playerAircraft->setVelocity(0.f, 0.f);
 }
 
-void GamePlay::playerVsWall(Entity* const a, Entity* const b)
+void GamePlay::playerVsWall(Entity& a, Entity& b)
 {
-	entities.push_back(std::make_unique<Explosion>(this, mAnimationHolder.getResource(ID::ExplosionShip),
-		sf::Vector2f(a->getPosition().x, a->getPosition().y), 0.f, 0.f));
+	exploVec.emplace_back(this, mAnimationHolder.getResource(ID::ExplosionShip),
+		sf::Vector2f(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
 
 	qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
 	qSounds.back().play();
