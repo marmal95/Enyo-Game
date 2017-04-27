@@ -302,7 +302,7 @@ void GamePlay::checkCollisions()
 	// Player vs Wall
 	for (auto& a : wallVec)
 		if (isCollide(*playerAircraft.get(), a))
-			playerVsAsteroid(*playerAircraft.get(), a);
+			playerVsWall(*playerAircraft.get(), a);
 }
 
 /**
@@ -310,6 +310,9 @@ void GamePlay::checkCollisions()
  */
 void GamePlay::checkUpdateEntities(float dt)
 {
+	playerAircraft->update(dt);
+	playerAircraft->getAnimation().update();
+
 	for (auto i = wallVec.begin(); i != wallVec.end();)
 	{
 		i->update(dt);
