@@ -3,7 +3,6 @@
 
 #include "Entity.h"
 #include "Animation.h"
-#include "GamePlay.h"
 
 class Wall : public Entity
 {

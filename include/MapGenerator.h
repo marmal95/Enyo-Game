@@ -3,7 +3,8 @@
 
 #include <vector>
 #include <string>
-#include "Entity.h"
+
+#include <SFML/System/Vector2.hpp>
 
 enum class MapField
 {

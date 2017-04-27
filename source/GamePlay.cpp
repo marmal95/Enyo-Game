@@ -209,6 +209,7 @@ void GamePlay::addWalls()
 void GamePlay::createPlayer()
 {
 	playerAircraft = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(), 0.F, 20.F);
+
 }
 
 void GamePlay::createAsteroids(ID asteroidId, const uint32_t& count)

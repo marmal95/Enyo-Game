@@ -46,9 +46,6 @@ private:
 	// Sounds
 	std::list<sf::Sound> qSounds;
 
-	// Entities List
-//	std::vector<std::unique_ptr<Entity>> entities;
-
 	// Entities Objects Vectors
 	std::vector<Wall> wallVec;
 	std::vector<Explosion> exploVec;
