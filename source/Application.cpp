@@ -2,7 +2,12 @@
 #include "Menu.h"
 #include "GamePlay.h"
 
-#include <iostream>
+#define SHOWFPS
+#ifdef SHOWFPS
+	#include <iostream>
+#endif // SHOWFPS
+
+
 
 #include <SFML/Window/Event.hpp>
 
@@ -16,6 +21,11 @@ Application::Application(const sf::Vector2i& windowDimension)
 
 void Application::run()
 {
+	#ifdef SHOWFPS
+		uint32_t fps = 0;
+		float counter = 0.f;
+	#endif
+
 	sf::Clock clock;
 	while (window.isOpen())
 	{
@@ -37,7 +47,18 @@ void Application::run()
 
 		{
 			float dt = clock.restart().asSeconds();
-			std::cout << 1 / dt << std::endl;
+			
+			#ifdef SHOWFPS
+				++fps;
+				counter += dt;
+				if (counter > 1.f)
+				{
+					std::cout << fps << std::endl;
+					counter = 0.f;
+					fps = 0;
+				}
+			#endif
+	
 			if (!pStage->update(dt))
 				break;
 		}
