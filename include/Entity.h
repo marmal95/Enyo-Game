@@ -2,7 +2,6 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include "SceneNode.h"
 #include "Animation.h"
 #include "Id.h"
 
@@ -14,7 +13,7 @@ constexpr float M_PI = 3.141592F;
 
 class GamePlay;
 
-class Entity : public SceneNode
+class Entity : public sf::Drawable, public sf::Transformable
 {
 protected:
 	// Entity's Force
@@ -43,7 +42,7 @@ public:
           const sf::Vector2f& position, const float& angle, const float& radius);
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	virtual void update(float dt) override;
+	virtual void update(float dt);
 
 	void setVelocity(const sf::Vector2f& velocity);
 	void setVelocity(float dx, float dy);

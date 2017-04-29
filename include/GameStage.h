@@ -10,10 +10,10 @@
 class GameStage
 {
 public:
-	GameStage();
+	GameStage() = default;
 	GameStage(const GameStage&) = delete;
 	GameStage& operator=(const GameStage&) = delete;
-	virtual ~GameStage();
+	virtual ~GameStage() = default;
 
 public:
 	virtual void init() = 0;

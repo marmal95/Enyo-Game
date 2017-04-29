@@ -8,7 +8,6 @@
 #endif // SHOWFPS
 
 
-
 #include <SFML/Window/Event.hpp>
 
 Application::Application(const sf::Vector2i& windowDimension)
@@ -16,7 +15,7 @@ Application::Application(const sf::Vector2i& windowDimension)
 		"The Enyo Game", sf::Style::Default),
 	windowDimension(windowDimension), pStage(nullptr)
 {
-	//window.setVerticalSyncEnabled(true);
+	window.setVerticalSyncEnabled(true);
 }
 
 void Application::run()
