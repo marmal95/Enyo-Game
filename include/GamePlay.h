@@ -77,6 +77,11 @@ private:
 	void checkRandomAsteroid();
 	void checkSounds();
 
+	void updateWalls(float dt);
+	void updateExplosions(float dt);
+	void updateAsteroids(float dt);
+	void updateBullets(float dt);
+
 	bool isCollide(const Entity& a, const Entity& b);
 	void makeBounce(Entity& a, Entity& b);
 

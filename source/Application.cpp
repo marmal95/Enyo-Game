@@ -2,10 +2,12 @@
 #include "Menu.h"
 #include "GamePlay.h"
 
-#define SHOWFPS
-#ifdef SHOWFPS
+// Uncomment if want to DEBUG on Release
+// #define _DEBUG
+
+#ifdef _DEBUG
 	#include <iostream>
-#endif // SHOWFPS
+#endif // DEBUG
 
 
 #include <SFML/Window/Event.hpp>
@@ -20,7 +22,7 @@ Application::Application(const sf::Vector2i& windowDimension)
 
 void Application::run()
 {
-	#ifdef SHOWFPS
+	#ifdef _DEBUG
 		uint32_t fps = 0;
 		float counter = 0.f;
 	#endif
@@ -47,7 +49,7 @@ void Application::run()
 		{
 			float dt = clock.restart().asSeconds();
 			
-			#ifdef SHOWFPS
+			#ifdef _DEBUG
 				++fps;
 				counter += dt;
 				if (counter > 1.f)

@@ -7,7 +7,7 @@
 class Wall : public Entity
 {
 public:
-	Wall(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, 
+	Wall(const GamePlay* window, const Animation& animation, const Vector<float>& position,
 		const float& angle, const float& sizeX);
 	void update(float dt) override;
 };

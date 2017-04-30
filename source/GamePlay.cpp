@@ -106,9 +106,9 @@ void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
 			if (pressed)
 			{
 				bulletVec.emplace_back(this, mAnimationHolder.getResource(ID::BulletBlue),
-					sf::Vector2f(playerAircraft->getPosition().x, playerAircraft->getPosition().y), playerAircraft->getRotation(), 10.F);
+					Vector<float>(playerAircraft->getPosition().x, playerAircraft->getPosition().y), playerAircraft->getRotation(), 10.F);
 
-				qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BulletBlueSound)));
+				qSounds.emplace_back(mSoundHolder.getResource(ID::BulletBlueSound));
 				qSounds.back().play();
 			}
 			break;
@@ -145,28 +145,28 @@ void GamePlay::initializeWold()
 	sBackground.setTexture(mTextureHolder.getResource(ID::SpaceBackground));
 
 	mAnimationHolder.load(ID::Explosion, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Explosion), sf::Vector2f(0, 0), 256, 256, 48, 0.5f));
+		mTextureHolder.getResource(ID::Explosion), Vector<float>(0, 0), 256, 256, 48, 0.5f));
 
 	mAnimationHolder.load(ID::RockBig, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::RockBig), sf::Vector2f(0, 0), 64, 64, 16, 0.2f));
+		mTextureHolder.getResource(ID::RockBig), Vector<float>(0, 0), 64, 64, 16, 0.2f));
 
 	mAnimationHolder.load(ID::RockSmall, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::RockSmall), sf::Vector2f(0, 0), 64, 64, 16, 0.2f));
+		mTextureHolder.getResource(ID::RockSmall), Vector<float>(0, 0), 64, 64, 16, 0.2f));
 
 	mAnimationHolder.load(ID::BulletBlue, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::BulletBlue), sf::Vector2f(0, 0), 32, 64, 16, 0.8f));
+		mTextureHolder.getResource(ID::BulletBlue), Vector<float>(0, 0), 32, 64, 16, 0.8f));
 
 	mAnimationHolder.load(ID::Spaceship, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Spaceship), sf::Vector2f(40, 0), 40, 40, 1, 0.f));
+		mTextureHolder.getResource(ID::Spaceship), Vector<float>(40, 0), 40, 40, 1, 0.f));
 
 	mAnimationHolder.load(ID::SpaceshipFly, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::SpaceshipFly), sf::Vector2f(40, 40), 40, 40, 1, 0.f));
+		mTextureHolder.getResource(ID::SpaceshipFly), Vector<float>(40, 40), 40, 40, 1, 0.f));
 
 	mAnimationHolder.load(ID::ExplosionShip, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::ExplosionShip), sf::Vector2f(0, 0), 192, 192, 64, 0.5f));
+		mTextureHolder.getResource(ID::ExplosionShip), Vector<float>(0, 0), 192, 192, 64, 0.5f));
 
 	mAnimationHolder.load(ID::Wall, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Wall), sf::Vector2f(0, 0), 50, 50, 1, 0.f));
+		mTextureHolder.getResource(ID::Wall), Vector<float>(0, 0), 50, 50, 1, 0.f));
 
 	mSoundHolder.load(ID::BigExplosionSound, "sounds/explosion_big.wav");
 	mSoundHolder.load(ID::SmallExplosionSound, "sounds/explosion_small.wav");
@@ -200,7 +200,7 @@ void GamePlay::addWalls()
 		for (int j = 0; j < 39; ++j)
 			if (generator.getField(static_cast<uint32_t>(j), static_cast<uint32_t>(i)) == MapField::Wall)
 				wallVec.emplace_back(
-					this, mAnimationHolder.getResource(ID::Wall), sf::Vector2f(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0.F, 25.F);
+					this, mAnimationHolder.getResource(ID::Wall), Vector<float>(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0.F, 25.F);
 }
 
 /**
@@ -209,14 +209,13 @@ void GamePlay::addWalls()
 void GamePlay::createPlayer()
 {
 	playerAircraft = std::make_unique<Player>(this, mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(), 0.F, 20.F);
-
 }
 
 void GamePlay::createAsteroids(ID asteroidId, const uint32_t& count)
 {
 	float radius{};
 	float angle{};
-	sf::Vector2f pos{};
+	Vector<float> pos{};
 
 	for (uint32_t i = 0; i < count; ++i)
 	{
@@ -313,6 +312,22 @@ void GamePlay::checkUpdateEntities(float dt)
 	playerAircraft->update(dt);
 	playerAircraft->getAnimation().update();
 
+	updateWalls(dt);
+	updateExplosions(dt);
+	updateAsteroids(dt);
+	updateBullets(dt);
+}
+
+/**
+ * Checks Game sounds. If stopped playing - remove them.
+ */
+void GamePlay::checkSounds()
+{
+	qSounds.remove_if([](auto& snd) {return snd.getStatus() == sf::Sound::Stopped; });
+}
+
+void GamePlay::updateWalls(float dt)
+{
 	for (auto i = wallVec.begin(); i != wallVec.end();)
 	{
 		i->update(dt);
@@ -326,7 +341,10 @@ void GamePlay::checkUpdateEntities(float dt)
 		else
 			++i;
 	}
+}
 
+void GamePlay::updateExplosions(float dt)
+{
 	for (auto i = exploVec.begin(); i != exploVec.end();)
 	{
 		i->update(dt);
@@ -343,8 +361,10 @@ void GamePlay::checkUpdateEntities(float dt)
 		else
 			++i;
 	}
+}
 
-
+void GamePlay::updateAsteroids(float dt)
+{
 	for (auto i = asteroidVec.begin(); i != asteroidVec.end();)
 	{
 		i->update(dt);
@@ -358,8 +378,10 @@ void GamePlay::checkUpdateEntities(float dt)
 		else
 			++i;
 	}
+}
 
-
+void GamePlay::updateBullets(float dt)
+{
 	for (auto i = bulletVec.begin(); i != bulletVec.end();)
 	{
 		i->update(dt);
@@ -373,14 +395,6 @@ void GamePlay::checkUpdateEntities(float dt)
 		else
 			++i;
 	}
-}
-
-/**
- * Checks Game sounds. If stopped playing - remove them.
- */
-void GamePlay::checkSounds()
-{
-	qSounds.remove_if([](auto& snd) {return snd.getStatus() == sf::Sound::Stopped; });
 }
 
 /**
@@ -399,29 +413,21 @@ bool GamePlay::isCollide(const Entity& a, const Entity& b)
 void GamePlay::makeBounce(Entity& a, Entity& b)
 {
 	// Current Velocity Vector
-	float vX = a.getVelocity().x;
-	float vY = a.getVelocity().y;
+	Vector<float> vel = a.getVelocity();
 
-	// Velocity Vector Norm
-//	float vLen = static_cast<float>(sqrt(vX*vX + vY*vY));
+	// Normal Vector
+	Vector<float> normVec = b.getPosition() - a.getPosition();
 
-	// Normal Line
-	float nX = b.getPosition().x - a.getPosition().x;
-	float nY = b.getPosition().y - a.getPosition().y;
+	// Normalize Normal - vector
+	normVec.normalize();
 
-	// Normalize N - vector
-	float nLen = static_cast<float>(sqrt(nX * nX + nY * nY));
-	nX /= nLen;
-	nY /= nLen;
+	// Velocity and Normal dot product
+	float dotProd_VN = vel * normVec;
 
-	// V * N - dot product
-	float dotProd_VN = vX * nX + vY * nY;
+	// New Velocity vector
+	vel -= 2.f * dotProd_VN * normVec;
 
-	// New V vector
-	float nVX = vX - 2 * dotProd_VN * nX;
-	float nVY = vY - 2 * dotProd_VN * nY;
-
-	a.setVelocity(nVX, nVY);
+	a.setVelocity(vel);
 }
 
 void GamePlay::asteroidVsBullet(Entity& a, Entity& b)
@@ -431,22 +437,22 @@ void GamePlay::asteroidVsBullet(Entity& a, Entity& b)
 
 	// Play Sound
 	if (a.getRadius() > 20.f)
-		qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
+		qSounds.emplace_back(mSoundHolder.getResource(ID::BigExplosionSound));
 	else
-		qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::SmallExplosionSound)));
+		qSounds.emplace_back(mSoundHolder.getResource(ID::SmallExplosionSound));
 	qSounds.back().play();
 
 	exploVec.emplace_back(
-		this, mAnimationHolder.getResource(ID::Explosion), sf::Vector2f(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
+		this, mAnimationHolder.getResource(ID::Explosion), Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
 }
 
 void GamePlay::playerVsAsteroid(Entity& a, Entity& b)
 {
 	b.setLife(false);
 	exploVec.emplace_back(this, mAnimationHolder.getResource(ID::ExplosionShip),
-		sf::Vector2f(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
+		Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
 
-	qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
+	qSounds.emplace_back(mSoundHolder.getResource(ID::BigExplosionSound));
 	qSounds.back().play();
 
 	playerAircraft->setPosition(200.f, 200.f);
@@ -456,9 +462,9 @@ void GamePlay::playerVsAsteroid(Entity& a, Entity& b)
 void GamePlay::playerVsWall(Entity& a, Entity& b)
 {
 	exploVec.emplace_back(this, mAnimationHolder.getResource(ID::ExplosionShip),
-		sf::Vector2f(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
+		Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
 
-	qSounds.push_back(sf::Sound(mSoundHolder.getResource(ID::BigExplosionSound)));
+	qSounds.emplace_back(mSoundHolder.getResource(ID::BigExplosionSound));
 	qSounds.back().play();
 
 	playerAircraft->setPosition(200.f, 200.f);

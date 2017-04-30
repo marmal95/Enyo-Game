@@ -8,7 +8,7 @@
  * @param angle wall rotation angle
  * @param sizeX wall size
  */
-Wall::Wall(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, const float& angle, const float& sizeX)
+Wall::Wall(const GamePlay* window, const Animation& animation, const Vector<float>& position, const float& angle, const float& sizeX)
 	: Entity(window, animation, position, angle, sizeX)
 {
 	id = EntityId::Wall;

@@ -4,6 +4,8 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <vector>
 
+#include "Vector.hpp"
+
 class Animation
 {
 private:
@@ -13,8 +15,8 @@ private:
     std::vector<sf::IntRect> frames;
 
 public:
-    Animation();
-    Animation(const sf::Texture &t, const sf::Vector2f& position,
+	Animation();
+	Animation(const sf::Texture &t, const Vector<float>& position,
               const int& w, const int& h, const int& count, const float& speed);
 
     void setSpritePos(const float& x_pos, const float& y_pos);

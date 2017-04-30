@@ -12,7 +12,7 @@
  * @param radius object radius
  */
 Entity::Entity(const GamePlay* window, const Animation& animation,
-	const sf::Vector2f& position, const float& angle, const float& radius)
+	const Vector<float>& position, const float& angle, const float& radius)
 	: mVelocity(0, 0), radius(radius), life(true), id(EntityId::Entity), anim(animation), window(window)
 {
 	setPosition(position);
@@ -101,7 +101,7 @@ void Entity::setLife(bool life)
  * Set Entity velocity
  * @param velocity Entiy Vector2f velocity
  */
-void Entity::setVelocity(const sf::Vector2f& velocity)
+void Entity::setVelocity(const Vector<float>& velocity)
 {
 	mVelocity = velocity;
 }
@@ -121,12 +121,12 @@ void Entity::setVelocity(float dx, float dy)
  * Get Entity Velocity - const
  * @return entity velocity
  */
-sf::Vector2f Entity::getVelocity() const
+Vector<float> Entity::getVelocity() const
 {
 	return mVelocity;
 }
 
-sf::Vector2f& Entity::getVelocity()
+Vector<float>& Entity::getVelocity()
 {
 	return mVelocity;
 }

@@ -11,7 +11,7 @@
  * @param angle direction angle
  * @param radius player radius
  */
-Player::Player(const GamePlay* window, const Animation& animation, const sf::Vector2f& position, const float& angle, const float& radius)
+Player::Player(const GamePlay* window, const Animation& animation, const Vector<float>& position, const float& angle, const float& radius)
 	: Entity(window, animation, position, angle, radius)
 {
 	id = EntityId::Player;

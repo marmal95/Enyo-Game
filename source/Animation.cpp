@@ -1,6 +1,7 @@
 
 #include <cstdint>
 #include "Animation.h"
+#include "Vector.hpp"
 
 /**
  * Initializes Variables.
@@ -19,7 +20,7 @@ Animation::Animation()
  * @param count number of frames in texture
  * @param speed animation speed
  */
-Animation::Animation(const sf::Texture& t, const sf::Vector2f& position,
+Animation::Animation(const sf::Texture& t, const Vector<float>& position,
                      const int& w, const int& h, const int& count, const float& speed)
     : frame(0), speed(speed)
 {

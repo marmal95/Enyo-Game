@@ -4,6 +4,7 @@
 
 #include "Animation.h"
 #include "Id.h"
+#include "Vector.hpp"
 
 #include <string>
 
@@ -17,10 +18,10 @@ class Entity : public sf::Drawable, public sf::Transformable
 {
 protected:
 	// Entity's Force
-	sf::Vector2f mForce;
+	Vector<float> mForce;
 
 	// Entity's Actual Velocity
-	sf::Vector2f mVelocity;
+	Vector<float> mVelocity;
 
 	// Entity's Radius
     float radius;
@@ -39,15 +40,15 @@ protected:
 
 public:
     Entity(const GamePlay* window, const Animation& animation,
-          const sf::Vector2f& position, const float& angle, const float& radius);
+		const Vector<float>& position, const float& angle, const float& radius);
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void update(float dt);
 
-	void setVelocity(const sf::Vector2f& velocity);
+	void setVelocity(const Vector<float>& velocity);
 	void setVelocity(float dx, float dy);
-	sf::Vector2f getVelocity() const;
-	sf::Vector2f& getVelocity();
+	Vector<float> getVelocity() const;
+	Vector<float>& getVelocity();
 
     float getRadius() const;
 	EntityId getId() const;
