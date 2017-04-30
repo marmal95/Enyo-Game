@@ -65,18 +65,24 @@ void Menu::init()
 
 	auto desktopMode = sf::VideoMode::getDesktopMode();
 
+#ifdef _DEBUG
+	std::cout << desktopMode.width << " " << desktopMode.height << std::endl;
+#endif
+
 	menuOptions[0].setFont(font);
 	menuOptions[0].setFillColor(sf::Color::Red);
 	menuOptions[0].setString("Play");
-	menuOptions[0].setPosition(sf::Vector2f(static_cast<float>(desktopMode.width / 2), static_cast<float>(desktopMode.height / (2 + 1) * 1)));
+	menuOptions[0].setPosition(sf::Vector2f(desktopMode.width / 2.f, desktopMode.height / (2.f + 1) * 1));
 
 	menuOptions[1].setFont(font);
 	menuOptions[1].setFillColor(sf::Color::White);
 	menuOptions[1].setString("Exit");
-	menuOptions[1].setPosition(sf::Vector2f(static_cast<float>(desktopMode.width / 2), static_cast<float>(desktopMode.height / (2 + 1) * 2)));
+	menuOptions[1].setPosition(sf::Vector2f(desktopMode.width / 2.f, desktopMode.height / (2.f + 1) * 2));
 
 	tBackground.loadFromFile("images/menu_background.jpg");
 	sBackground.setTexture(tBackground);
+	sBackground.setScale(desktopMode.width / sBackground.getLocalBounds().width,
+		desktopMode.height / sBackground.getLocalBounds().height);
 }
 
 /**

@@ -16,7 +16,7 @@ private:
 
 public:
 	Animation();
-	Animation(const sf::Texture &t, const Vector<float>& position,
+	Animation(const sf::Texture &t, const Vector<int>& position,
               const int& w, const int& h, const int& count, const float& speed);
 
     void setSpritePos(const float& x_pos, const float& y_pos);

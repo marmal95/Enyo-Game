@@ -145,28 +145,28 @@ void GamePlay::initializeWold()
 	sBackground.setTexture(mTextureHolder.getResource(ID::SpaceBackground));
 
 	mAnimationHolder.load(ID::Explosion, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Explosion), Vector<float>(0, 0), 256, 256, 48, 0.5f));
+		mTextureHolder.getResource(ID::Explosion), Vector<int>(0, 0), 256, 256, 48, 0.5f));
 
 	mAnimationHolder.load(ID::RockBig, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::RockBig), Vector<float>(0, 0), 64, 64, 16, 0.2f));
+		mTextureHolder.getResource(ID::RockBig), Vector<int>(0, 0), 64, 64, 16, 0.2f));
 
 	mAnimationHolder.load(ID::RockSmall, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::RockSmall), Vector<float>(0, 0), 64, 64, 16, 0.2f));
+		mTextureHolder.getResource(ID::RockSmall), Vector<int>(0, 0), 64, 64, 16, 0.2f));
 
 	mAnimationHolder.load(ID::BulletBlue, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::BulletBlue), Vector<float>(0, 0), 32, 64, 16, 0.8f));
+		mTextureHolder.getResource(ID::BulletBlue), Vector<int>(0, 0), 32, 64, 16, 0.8f));
 
 	mAnimationHolder.load(ID::Spaceship, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Spaceship), Vector<float>(40, 0), 40, 40, 1, 0.f));
+		mTextureHolder.getResource(ID::Spaceship), Vector<int>(40, 0), 40, 40, 1, 0.f));
 
 	mAnimationHolder.load(ID::SpaceshipFly, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::SpaceshipFly), Vector<float>(40, 40), 40, 40, 1, 0.f));
+		mTextureHolder.getResource(ID::SpaceshipFly), Vector<int>(40, 40), 40, 40, 1, 0.f));
 
 	mAnimationHolder.load(ID::ExplosionShip, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::ExplosionShip), Vector<float>(0, 0), 192, 192, 64, 0.5f));
+		mTextureHolder.getResource(ID::ExplosionShip), Vector<int>(0, 0), 192, 192, 64, 0.5f));
 
 	mAnimationHolder.load(ID::Wall, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Wall), Vector<float>(0, 0), 50, 50, 1, 0.f));
+		mTextureHolder.getResource(ID::Wall), Vector<int>(0, 0), 50, 50, 1, 0.f));
 
 	mSoundHolder.load(ID::BigExplosionSound, "sounds/explosion_big.wav");
 	mSoundHolder.load(ID::SmallExplosionSound, "sounds/explosion_small.wav");

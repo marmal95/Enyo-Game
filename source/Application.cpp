@@ -14,7 +14,7 @@
 
 Application::Application(const sf::Vector2i& windowDimension)
 	: window(sf::VideoMode(static_cast<uint32_t>(windowDimension.x), static_cast<uint32_t>(windowDimension.y)),
-		"The Enyo Game", sf::Style::Default),
+		"The Enyo Game", sf::Style::Fullscreen),
 	windowDimension(windowDimension), pStage(nullptr)
 {
 	window.setVerticalSyncEnabled(true);
