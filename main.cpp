@@ -5,7 +5,7 @@
 int main()
 {
 	// Debudz
-	srand(time(NULL));
+	srand((unsigned int) time(NULL));
 
 	// Game Window Dimension
 	const int game_width = 1920;

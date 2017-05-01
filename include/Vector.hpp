@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
+#include <utility>
 
 template <typename T>
 class Vector : public sf::Vector2<T>
@@ -38,22 +39,22 @@ Vector<T>::Vector(T x, T y)
 template<typename T>
 Vector<T>::Vector(const Vector<T>& u)
 {
-	x = u.x;
-	y = u.y;
+	this->x = u.x;
+	this->y = u.y;
 }
 
 template<typename T>
 inline Vector<T>::Vector(const sf::Vector2<T>& u)
 {
-	x = u.x;
-	y = u.y;
+	this->x = u.x;
+	this->y = u.y;
 }
 
 template<typename T>
 Vector<T>::Vector(Vector<T>&& u)
 {
-	x = std::move(u.x);
-	y = std::move(u.y);
+	this->x = std::move(u.x);
+	this->y = std::move(u.y);
 	u.x = 0;
 	u.y = 0;
 }
@@ -61,45 +62,45 @@ Vector<T>::Vector(Vector<T>&& u)
 template<typename T>
 float Vector<T>::magnitude() const
 {
-	return static_cast<float>(sqrt(x*x + y*y));
+	return static_cast<float>(sqrt(this->x*this->x + this->y*this->y));
 }
 
 template<typename T>
 void Vector<T>::normalize()
 {
 	float length = this->magnitude();
-	x /= length;
-	y /= length;
+	this->x /= length;
+	this->y /= length;
 }
 
 template<typename T>
 void Vector<T>::reverse()
 {
-	x = -x;
-	y = -y;
+	this->x = -this->x;
+	this->y = -this->y;
 }
 
 template<typename T>
 Vector<T>& Vector<T>::operator=(const Vector<T>& u)
 {
-	x = u.x;
-	y = u.y;
+	this->x = u.x;
+	this->y = u.y;
 	return *this;
 }
 
 template<typename T>
 inline Vector<T>& Vector<T>::operator=(const sf::Vector2<T>& u)
 {
-	x = u.x;
-	y = u.y;
+	this->x = u.x;
+	this->y = u.y;
 	return *this;
 }
 
 template<typename T>
 Vector<T>& Vector<T>::operator=(Vector<T>&& u)
 {
-	x = std::move(u.x);
-	y = std::move(u.y);
+	this->x = std::move(u.x);
+	this->y = std::move(u.y);
 	u.x = 0;
 	u.y = 0;
 	return *this;
@@ -108,5 +109,5 @@ Vector<T>& Vector<T>::operator=(Vector<T>&& u)
 template<typename T>
 T Vector<T>::operator*(const Vector<T>& u) const
 {
-	return static_cast<float>(x * u.x + y * u.y);
+	return static_cast<float>(this->x * u.x + this->y * u.y);
 }
