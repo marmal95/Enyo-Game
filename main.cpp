@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Constants.h"
 
 #include <iostream>
 
@@ -8,8 +9,8 @@ int main()
 	srand((unsigned int) time(NULL));
 
 	// Game Window Dimension
-	const int game_width = 1920;
-	const int game_height = 1200;
+	const int game_width = WINDOW_WIDTH;
+	const int game_height = WINDOW_HEIGHT;
 
 	try
 	{

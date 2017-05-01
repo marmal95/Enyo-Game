@@ -1,6 +1,7 @@
 #include "MapGenerator.h"
 #include "Explosion.h"
 #include "GamePlay.h"
+#include "Constants.h"
 
 #include <SFML/Window/Event.hpp>
 #include <cmath>
@@ -21,7 +22,7 @@ GamePlay::GamePlay(sf::RenderWindow& window, const sf::Vector2i& dimension)
 	// Additional Containers
 	qSounds(), wallVec(), exploVec(), asteroidVec(), bulletVec(), sBackground(),
 	// Map Generator
-	generator(39, 24, "z", 1),
+	generator(WALL_COUNT_W, WALL_COUNT_H, "z", 1),
 	// Random Generator
 	mt(std::random_device()()), randDist(),
 	scorePoints{}
@@ -110,7 +111,7 @@ void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
 			if (pressed)
 			{
 				bulletVec.emplace_back(mAnimationHolder.getResource(ID::BulletBlue),
-					Vector<float>(playerAircraft->getPosition().x, playerAircraft->getPosition().y), playerAircraft->getRotation(), 10.F);
+					Vector<float>(playerAircraft->getPosition().x, playerAircraft->getPosition().y), playerAircraft->getRotation(), BULLET_RADIUS);
 
 				qSounds.emplace_back(mSoundHolder.getResource(ID::BulletBlueSound));
 				qSounds.back().play();
@@ -127,9 +128,9 @@ void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
 				mOrthVec.normalize();
 
 				bulletVec.emplace_back(mAnimationHolder.getResource(ID::BulletRed),
-					Vector<float>(mPos - 20.f * mOrthVec), playerAircraft->getRotation(), 10.F);
+					Vector<float>(mPos - 20.f * mOrthVec), playerAircraft->getRotation(), BULLET_RADIUS);
 				bulletVec.emplace_back(mAnimationHolder.getResource(ID::BulletRed),
-					Vector<float>(mPos + 20.f * mOrthVec), playerAircraft->getRotation(), 10.F);
+					Vector<float>(mPos + 20.f * mOrthVec), playerAircraft->getRotation(), BULLET_RADIUS);
 
 				qSounds.emplace_back(mSoundHolder.getResource(ID::BulletRedSound));
 				qSounds.back().play();
@@ -169,31 +170,31 @@ void GamePlay::initializeWold()
 	sBackground.setTexture(mTextureHolder.getResource(ID::SpaceBackground));
 
 	mAnimationHolder.load(ID::Explosion, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Explosion), Vector<int>(0, 0), 256, 256, 48, 0.5f));
+		mTextureHolder.getResource(ID::Explosion), EXPLO_WIDTH, EXPLO_HEIGHT, 48, 0.5f));
 
 	mAnimationHolder.load(ID::RockBig, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::RockBig), Vector<int>(0, 0), 64, 64, 16, 0.2f));
+		mTextureHolder.getResource(ID::RockBig), ROCK_WIDTH, ROCK_HEIGHT, 16, 0.2f));
 
 	mAnimationHolder.load(ID::RockSmall, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::RockSmall), Vector<int>(0, 0), 64, 64, 16, 0.2f));
+		mTextureHolder.getResource(ID::RockSmall), ROCK_WIDTH, ROCK_HEIGHT, 16, 0.2f));
 
 	mAnimationHolder.load(ID::BulletBlue, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::BulletBlue), Vector<int>(0, 0), 32, 64, 16, 0.8f));
+		mTextureHolder.getResource(ID::BulletBlue), BULLET_WIDTH, BULLET_HEIGHT, 16, 0.8f));
 
 	mAnimationHolder.load(ID::BulletRed, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::BulletRed), Vector<int>(0, 0), 32, 64, 16, 0.8f));
+		mTextureHolder.getResource(ID::BulletRed), BULLET_WIDTH, BULLET_HEIGHT, 16, 0.8f));
 
 	mAnimationHolder.load(ID::Spaceship, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Spaceship), Vector<int>(0, 0), 75, 75, 1, 0.f));
+		mTextureHolder.getResource(ID::Spaceship),  SHIP_WIDTH, SHIP_HEIGHT, 1, 0.f));
 
 	mAnimationHolder.load(ID::SpaceshipFly, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::SpaceshipFly), Vector<int>(0, 0), 75, 75, 1, 0.f));
+		mTextureHolder.getResource(ID::SpaceshipFly), SHIP_WIDTH, SHIP_HEIGHT, 1, 0.f));
 
 	mAnimationHolder.load(ID::ExplosionShip, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::ExplosionShip), Vector<int>(0, 0), 192, 192, 64, 0.5f));
+		mTextureHolder.getResource(ID::ExplosionShip), SHIP_EXPLOT_WIDTH, SHIP_EXPLOT_HEIGHT, 64, 0.5f));
 
 	mAnimationHolder.load(ID::Wall, std::make_unique<Animation>(
-		mTextureHolder.getResource(ID::Wall), Vector<int>(0, 0), 50, 50, 1, 0.f));
+		mTextureHolder.getResource(ID::Wall), WALL_WIDTH, WALL_HEIGHT, 1, 0.f));
 
 	mSoundHolder.load(ID::BigExplosionSound, "sounds/explosion_big.wav");
 	mSoundHolder.load(ID::SmallExplosionSound, "sounds/explosion_small.wav");
@@ -231,11 +232,12 @@ void GamePlay::buildScene()
  */
 void GamePlay::addWalls()
 {
-	for (int i = 0; i < 24; ++i)
-		for (int j = 0; j < 39; ++j)
+	for (int i = 0; i < WALL_COUNT_H; ++i)
+		for (int j = 0; j < WALL_COUNT_W; ++j)
 			if (generator.getField(static_cast<uint32_t>(j), static_cast<uint32_t>(i)) == MapField::Wall)
 				wallVec.emplace_back(
-					mAnimationHolder.getResource(ID::Wall), Vector<float>(static_cast<float>(j * 50), static_cast<float>(i * 50)), 0.F, 25.F);
+					mAnimationHolder.getResource(ID::Wall), 
+					Vector<float>(static_cast<float>(j * WALL_WIDTH),static_cast<float>(i * WALL_HEIGHT)), 0.F, WALL_RADIUS);
 }
 
 /**
@@ -243,7 +245,7 @@ void GamePlay::addWalls()
  */
 void GamePlay::createPlayer()
 {
-	playerAircraft = std::make_unique<Player>(mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(), 0.F, 35.F);
+	playerAircraft = std::make_unique<Player>(mAnimationHolder.getResource(ID::Spaceship), generator.getStartPoint(), 0.F, SHIP_RADIUS);
 }
 
 void GamePlay::createAsteroids(ID asteroidId, const uint32_t& count)
@@ -260,9 +262,9 @@ void GamePlay::createAsteroids(ID asteroidId, const uint32_t& count)
 
 		// Set Radius
 		if (asteroidId == ID::RockSmall)
-			radius = 15.f;
+			radius = SMALL_ROCK_RADIUS;
 		else if (asteroidId == ID::RockBig)
-			radius = 25.f;
+			radius = BIG_ROCK_RADIUS;
 
 		// Set Angle
 		angle = static_cast<float>(randDist(mt) % 360);
@@ -478,14 +480,14 @@ void GamePlay::asteroidVsBullet(Entity& a, Entity& b)
 	b.setLife(false);
 
 	// Play Sound
-	if (a.getRadius() > 20.f)
+	if (a.getId() == EntityId::BigAsteroid)
 		qSounds.emplace_back(mSoundHolder.getResource(ID::BigExplosionSound));
-	else
+	else if(a.getId() == EntityId::SmallAsteroid)
 		qSounds.emplace_back(mSoundHolder.getResource(ID::SmallExplosionSound));
 	qSounds.back().play();
 
 	exploVec.emplace_back(
-		mAnimationHolder.getResource(ID::Explosion), Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
+		mAnimationHolder.getResource(ID::Explosion), Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, EXPLO_RADIUS);
 
 	++scorePoints;
 	scoreText.setString(std::to_string(scorePoints));
@@ -495,7 +497,7 @@ void GamePlay::playerVsAsteroid(Entity& a, Entity& b)
 {
 	b.setLife(false);
 	exploVec.emplace_back(mAnimationHolder.getResource(ID::ExplosionShip),
-		Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
+		Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, EXPLO_RADIUS);
 
 	qSounds.emplace_back(mSoundHolder.getResource(ID::BigExplosionSound));
 	qSounds.back().play();
@@ -507,7 +509,7 @@ void GamePlay::playerVsAsteroid(Entity& a, Entity& b)
 void GamePlay::playerVsWall(Entity& a, Entity& b)
 {
 	exploVec.emplace_back(mAnimationHolder.getResource(ID::ExplosionShip),
-		Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, 0.f);
+		Vector<float>(a.getPosition().x, a.getPosition().y), 0.f, EXPLO_RADIUS);
 
 	qSounds.emplace_back(mSoundHolder.getResource(ID::BigExplosionSound));
 	qSounds.back().play();

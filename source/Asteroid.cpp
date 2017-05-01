@@ -16,7 +16,7 @@
 Asteroid::Asteroid(const Animation& animation, const Vector<float>& position, const float& angle, const float& radius)
 	: Entity(animation, position, angle, radius)
 {
-	id = EntityId::Asteroid;
+	id = radius > 20.f ? EntityId::BigAsteroid : EntityId::SmallAsteroid;
 
 	mVelocity.x = static_cast<float>(rand() % 8 - 4);
 	mVelocity.y = static_cast<float>(rand() % 8 - 4);

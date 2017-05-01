@@ -20,12 +20,11 @@ Animation::Animation()
  * @param count number of frames in texture
  * @param speed animation speed
  */
-Animation::Animation(const sf::Texture& t, const Vector<int>& position,
-                     const int& w, const int& h, const int& count, const float& speed)
+Animation::Animation(const sf::Texture& t, const int& w, const int& h, const int& count, const float& speed)
     : frame(0), speed(speed)
 {
     for(int i = 0; i < count; ++i)
-        frames.push_back(sf::IntRect(position.x + i * w, position.y, w, h));
+        frames.push_back(sf::IntRect(i * w, 0, w, h));
 
 
     sprite.setTexture(t);

@@ -122,7 +122,7 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y) const
 			else if (nbhX < 0 || nbhX >= static_cast<int>(sizeX) || nbhY < 0 || nbhY >= static_cast<int>(sizeY))
 				++alive;
 			else if (getField(static_cast<uint32_t>(nbhX), static_cast<uint32_t>(nbhY)) != MapField::Empty)
-					++alive;
+				++alive;
 		}
 	}
 
@@ -143,7 +143,6 @@ sf::Vector2f MapGenerator::getStartPoint() const
 	}
 
 	return sf::Vector2f(static_cast<float>(x*elementSize), static_cast<float>(y*elementSize));
-
 }
 
 /**

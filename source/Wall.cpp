@@ -8,8 +8,8 @@
  * @param angle wall rotation angle
  * @param sizeX wall size
  */
-Wall::Wall(const Animation& animation, const Vector<float>& position, const float& angle, const float& sizeX)
-	: Entity(animation, position, angle, sizeX)
+Wall::Wall(const Animation& animation, const Vector<float>& position, const float& angle, const float& radius)
+	: Entity(animation, position, angle, radius)
 {
 	id = EntityId::Wall;
 }

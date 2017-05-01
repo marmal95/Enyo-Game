@@ -2,6 +2,10 @@
 
 #include <SFML/Window/Event.hpp>
 
+#ifdef _DEBUG
+	#include <iostream>
+#endif
+
 /**
  * Initializes Menu
  */

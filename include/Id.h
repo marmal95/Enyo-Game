@@ -21,7 +21,8 @@ enum class ID
 enum class EntityId
 {
 	Entity,
-	Asteroid,
+	BigAsteroid,
+	SmallAsteroid,
 	Bullet,
 	Explosion,
 	Player,
