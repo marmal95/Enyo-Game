@@ -1,7 +1,7 @@
-
-#include <cstdint>
 #include "Animation.h"
+
 #include "Vector.hpp"
+#include <cstdint>
 
 /**
  * Initializes Variables.

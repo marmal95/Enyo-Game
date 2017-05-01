@@ -1,6 +1,6 @@
 #pragma once
-#include "GameStage.h"
 
+#include "GameStage.h"
 #include "ResourceHolder.hpp"
 #include "MapGenerator.h"
 #include "Id.h"
@@ -14,6 +14,7 @@
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 #include <list>
 #include <random>
@@ -43,6 +44,10 @@ private:
 	// Sound Holder
 	ResourceHolder<sf::SoundBuffer, ID> mSoundHolder;
 
+	// Font Holder
+	sf::Font mFont;
+	sf::Text scoreText;
+
 	// Sounds
 	std::list<sf::Sound> qSounds;
 
@@ -58,30 +63,39 @@ private:
 	// Pointer to Player Aircraft
 	std::unique_ptr<Player> playerAircraft;
 
-	// ---------------------------
-
+	// Random Generator
 	std::mt19937 mt;
 	std::uniform_int_distribution<uint32_t> randDist;
 
+	uint32_t scorePoints;
+
 private:
+	// Init Game
 	void initializeWold();
 	void buildScene();
-	void addWalls();
 
+	// Build Game World
+	void addWalls();
 	void createPlayer();
 	void createAsteroids(ID asteroidId, const uint32_t& count);
 
+	// Check Events
 	void checkPlayerMove();
 	void checkCollisions();
-	void checkUpdateEntities(float dt);
 	void checkRandomAsteroid();
+
+	// Update resources
+	void updateText();
 	void checkSounds();
 
+	// Update Entities
+	void updateEntities(float dt);
 	void updateWalls(float dt);
 	void updateExplosions(float dt);
 	void updateAsteroids(float dt);
 	void updateBullets(float dt);
 
+	// Check / React collisions
 	bool isCollide(const Entity& a, const Entity& b);
 	void makeBounce(Entity& a, Entity& b);
 
@@ -89,6 +103,7 @@ private:
 	void playerVsAsteroid(Entity& a, Entity& b);
 	void playerVsWall(Entity& a, Entity& b);
 
+	// Check spawn possibility
 	bool canSpawn(const float& x, const float& y, const float& radius);
 
 public:

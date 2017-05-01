@@ -1,6 +1,4 @@
-
-#ifndef ENYO_MENU_H
-#define ENYO_MENU_H
+#pragma once
 
 #include "GameStage.h"
 
@@ -8,7 +6,6 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-
 #include <cstdint>
 
 class Menu : public GameStage
@@ -39,5 +36,3 @@ public:
 	virtual void release() override;
 	virtual void handleUserInput(sf::Keyboard::Key key, bool pressed) override;
 };
-
-#endif //ENYO_MENU_H

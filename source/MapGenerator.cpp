@@ -1,9 +1,8 @@
 #include "MapGenerator.h"
+#include "Wall.h"
 
 #include <random>
 #include <iostream>
-
-#include "Wall.h"
 
 /**
  * Creates map generator with params

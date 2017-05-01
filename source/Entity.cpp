@@ -11,7 +11,7 @@
  * @param angle direction angle
  * @param radius object radius
  */
-Entity::Entity(const GamePlay* window, const Animation& animation,
+Entity::Entity(const Animation& animation,
 	const Vector<float>& position, const float& angle, const float& radius)
 	: mVelocity(0, 0), radius(radius), life(true), id(EntityId::Entity), anim(animation), window(window)
 {
@@ -29,7 +29,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(anim.getSprite());
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	sf::CircleShape circle(this->radius);
 	circle.setFillColor(sf::Color(255, 0, 0, 170));
 	circle.setPosition(getPosition());

@@ -1,7 +1,8 @@
+#pragma once
+
 #include "GameStage.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
-
 #include <memory>
 
 class Application

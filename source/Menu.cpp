@@ -1,7 +1,5 @@
-
 #include "Menu.h"
 
-#include <iostream>
 #include <SFML/Window/Event.hpp>
 
 /**

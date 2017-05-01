@@ -1,10 +1,9 @@
-
-#include <cmath>
-#include <iostream>
 #include "Entity.h"
 #include "Asteroid.h"
 #include "GamePlay.h"
 
+#include <cmath>
+#include <iostream>
 
 /**
  * Initializes Asteroid Object
@@ -14,8 +13,8 @@
  * @param angle direction angle
  * @param radius asteroid radius
  */
-Asteroid::Asteroid(const GamePlay* window, const Animation& animation, const Vector<float>& position, const float& angle, const float& radius)
-	: Entity(window, animation, position, angle, radius)
+Asteroid::Asteroid(const Animation& animation, const Vector<float>& position, const float& angle, const float& radius)
+	: Entity(animation, position, angle, radius)
 {
 	id = EntityId::Asteroid;
 

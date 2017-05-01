@@ -1,9 +1,7 @@
-#ifndef ENYO_MAPGENERATOR_H
-#define ENYO_MAPGENERATOR_H
+#pragma once
 
 #include <vector>
 #include <string>
-
 #include <SFML/System/Vector2.hpp>
 
 enum class MapField
@@ -37,5 +35,3 @@ public:
 	bool isEmpty(const float& x, const float& y) const;
 	sf::Vector2f getStartPoint() const;
 };
-
-#endif // !ENYO_MAPGENERATOR_H

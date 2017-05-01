@@ -1,6 +1,4 @@
-
-#ifndef ENYO_ID_H
-#define ENYO_ID_H
+#pragma once
 
 enum class ID
 {
@@ -8,7 +6,7 @@ enum class ID
     RockBig,
     RockSmall,
     BulletBlue,
-//    BulletRed,
+    BulletRed,
     Spaceship,
     SpaceshipFly,
     ExplosionShip,
@@ -16,6 +14,7 @@ enum class ID
     BigExplosionSound,
     SmallExplosionSound,
     BulletBlueSound,
+	BulletRedSound,
 	Wall
 };
 
@@ -28,6 +27,3 @@ enum class EntityId
 	Player,
 	Wall
 };
-
-
-#endif //ENYO_ID_H
