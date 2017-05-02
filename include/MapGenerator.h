@@ -29,9 +29,9 @@ public:
 
 	uint32_t getX() const;
 	uint32_t getY() const;
-	MapField& getField(const uint32_t& x, const uint32_t& y);
 	MapField getField(const uint32_t& x, const uint32_t& y) const;
 	void setField(const uint32_t& x, const uint32_t& y, const MapField& field);
 	bool isEmpty(const float& x, const float& y) const;
+	bool canSpawn(const float& x, const float& y, const float& radius);
 	sf::Vector2f getStartPoint() const;
 };

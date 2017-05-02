@@ -25,6 +25,7 @@ GamePlay::GamePlay(sf::RenderWindow& window, const sf::Vector2i& dimension)
 	generator(WALL_COUNT_W, WALL_COUNT_H, "z", 1),
 	// Random Generator
 	mt(std::random_device()()), randDist(),
+	// Scores
 	scorePoints{}
 {
 	wallVec.reserve(300);
@@ -232,11 +233,10 @@ void GamePlay::buildScene()
  */
 void GamePlay::addWalls()
 {
-	for (int i = 0; i < WALL_COUNT_H; ++i)
-		for (int j = 0; j < WALL_COUNT_W; ++j)
-			if (generator.getField(static_cast<uint32_t>(j), static_cast<uint32_t>(i)) == MapField::Wall)
-				wallVec.emplace_back(
-					mAnimationHolder.getResource(ID::Wall), 
+	for (uint32_t i = 0; i < WALL_COUNT_H; ++i)
+		for (uint32_t j = 0; j < WALL_COUNT_W; ++j)
+			if (generator.getField(j, i) == MapField::Wall)
+				wallVec.emplace_back(mAnimationHolder.getResource(ID::Wall), 
 					Vector<float>(static_cast<float>(j * WALL_WIDTH),static_cast<float>(i * WALL_HEIGHT)), 0.F, WALL_RADIUS);
 }
 
@@ -270,7 +270,7 @@ void GamePlay::createAsteroids(ID asteroidId, const uint32_t& count)
 		angle = static_cast<float>(randDist(mt) % 360);
 
 		// Spawn Asteroid
-		if (canSpawn(pos.x, pos.y, radius))
+		if (generator.canSpawn(pos.x, pos.y, radius))
 			asteroidVec.emplace_back(mAnimationHolder.getResource(asteroidId), pos, angle, radius);
 		else
 			continue;
@@ -502,7 +502,7 @@ void GamePlay::playerVsAsteroid(Entity& a, Entity& b)
 	qSounds.emplace_back(mSoundHolder.getResource(ID::BigExplosionSound));
 	qSounds.back().play();
 
-	playerAircraft->setPosition(200.f, 200.f);
+	playerAircraft->setPosition(generator.getStartPoint());
 	playerAircraft->setVelocity(0.f, 0.f);
 }
 
@@ -514,14 +514,6 @@ void GamePlay::playerVsWall(Entity& a, Entity& b)
 	qSounds.emplace_back(mSoundHolder.getResource(ID::BigExplosionSound));
 	qSounds.back().play();
 
-	playerAircraft->setPosition(200.f, 200.f);
+	playerAircraft->setPosition(generator.getStartPoint());
 	playerAircraft->setVelocity(0.f, 0.f);
-}
-
-bool GamePlay::canSpawn(const float& x, const float& y, const float& radius)
-{
-	return generator.isEmpty(x, y) && generator.isEmpty(x - radius, y - radius) && generator.isEmpty(x, y - radius) &&
-		generator.isEmpty(x + radius, y - radius) && generator.isEmpty(x - radius, y) && generator.isEmpty(x + radius, y) &&
-		generator.isEmpty(x + radius, y + radius) && generator.isEmpty(x, y + radius) &&
-		generator.isEmpty(x - radius, y + radius);
 }

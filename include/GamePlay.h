@@ -103,9 +103,6 @@ private:
 	void playerVsAsteroid(Entity& a, Entity& b);
 	void playerVsWall(Entity& a, Entity& b);
 
-	// Check spawn possibility
-	bool canSpawn(const float& x, const float& y, const float& radius);
-
 public:
 	GamePlay(sf::RenderWindow& window, const sf::Vector2i& dimension);
 

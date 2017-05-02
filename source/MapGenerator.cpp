@@ -151,17 +151,6 @@ sf::Vector2f MapGenerator::getStartPoint() const
 * @param y - y axis coordinate
 * @return field at [x,y] position
 */
-MapField& MapGenerator::getField(const uint32_t& x, const uint32_t& y)
-{
-	return fields[y*sizeX + x];
-}
-
-/**
-* Gets field.
-* @param x - x axis coordinate
-* @param y - y axis coordinate
-* @return field at [x,y] position
-*/
 MapField MapGenerator::getField(const uint32_t& x, const uint32_t& y) const
 {
 	return fields[y*sizeX + x];
@@ -181,4 +170,11 @@ void MapGenerator::setField(const uint32_t& x, const uint32_t& y, const MapField
 bool MapGenerator::isEmpty(const float& x, const float& y) const
 {
 	return (getField(static_cast<uint32_t>(x / elementSize), static_cast<uint32_t>(y / elementSize)) == MapField::Empty);
+}
+
+bool MapGenerator::canSpawn(const float & x, const float & y, const float & radius)
+{
+	return isEmpty(x, y) && isEmpty(x - radius, y - radius) && isEmpty(x, y - radius) &&
+		isEmpty(x + radius, y - radius) && isEmpty(x - radius, y) && isEmpty(x + radius, y) &&
+		isEmpty(x + radius, y + radius) && isEmpty(x, y + radius) && isEmpty(x - radius, y + radius);
 }
