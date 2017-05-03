@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "Entity.h"
 
 class Asteroid : public Entity

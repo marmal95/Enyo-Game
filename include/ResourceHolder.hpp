@@ -17,7 +17,7 @@ public:
 	void load(Identifier id, const std::string& filename, bool smooth);
     void load(Identifier id, std::unique_ptr<Resource>&& resource);
     Resource& getResource(Identifier id);
-    Resource& getResource(Identifier id) const;
+    const Resource& getResource(Identifier id) const;
 };
 
 template <typename Resource, typename Identifier>
@@ -65,7 +65,7 @@ Resource& ResourceHolder<Resource, Identifier>::getResource(Identifier id)
 }
 
 template <typename Resource, typename Identifier>
-Resource& ResourceHolder<Resource, Identifier>::getResource(Identifier id) const
+const Resource& ResourceHolder<Resource, Identifier>::getResource(Identifier id) const
 {
     auto found = mResourceMap.find(id);
     assert(found != mResourceMap.end());

@@ -1,8 +1,5 @@
 #include "Animation.h"
 
-#include "Vector.hpp"
-#include <cstdint>
-
 /**
  * Initializes Variables.
  */
@@ -20,12 +17,11 @@ Animation::Animation()
  * @param count number of frames in texture
  * @param speed animation speed
  */
-Animation::Animation(const sf::Texture& t, const int& w, const int& h, const int& count, const float& speed)
+Animation::Animation(const sf::Texture& t, const uint32_t& w, const uint32_t& h, const uint32_t& count, const float& speed)
     : frame(0), speed(speed)
 {
     for(int i = 0; i < count; ++i)
         frames.push_back(sf::IntRect(i * w, 0, w, h));
-
 
     sprite.setTexture(t);
     sprite.setOrigin(static_cast<float>(w/2), static_cast<float>(h/2));

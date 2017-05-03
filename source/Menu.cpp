@@ -92,7 +92,7 @@ void Menu::init()
  * @param dt frame time
  * @return if keep updating
  */
-bool Menu::update(float dt)
+bool Menu::update(float)
 {
 	return !sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 }

@@ -25,7 +25,7 @@ Entity::Entity(const Animation& animation,
  * @param target window we draw to
  * @param states -
  */
-void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Entity::draw(sf::RenderTarget& target, sf::RenderStates) const
 {
 	target.draw(anim.getSprite());
 
@@ -41,7 +41,7 @@ void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 /**
  * Updates Entity position
  */
-void Entity::update(float dt)
+void Entity::update(float)
 {
 	this->anim.setSpritePos(getPosition().x, getPosition().y);
 	this->anim.setSpriteRot(getRotation() + 90);

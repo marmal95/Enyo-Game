@@ -111,6 +111,4 @@ public:
 	virtual void draw(sf::RenderWindow& window) override;
 	virtual void release() override;
 	virtual void handleUserInput(sf::Keyboard::Key key, bool pressed) override;
-
-	sf::Vector2i getDimension() const;
 };

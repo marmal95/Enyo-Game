@@ -4,9 +4,6 @@
 #include "Constants.h"
 
 #include <SFML/Window/Event.hpp>
-#include <cmath>
-
-#include <iostream>
 
 /**
  * Initializes GamePlay
@@ -141,15 +138,6 @@ void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
 		default:
 			break;
 	}
-}
-
-/**
- * Get game dimension
- * @return game dimension
- */
-sf::Vector2i GamePlay::getDimension() const
-{
-	return worldDimension;
 }
 
 /**
@@ -372,7 +360,7 @@ void GamePlay::updateWalls(float dt)
 
 		if (!i->getLife())
 		{
-			std::swap(*i, *(wallVec.end() - 1));
+			std::iter_swap(i, wallVec.end() -1);
 			wallVec.erase(wallVec.end() - 1);
 		}
 		else
@@ -392,7 +380,7 @@ void GamePlay::updateExplosions(float dt)
 
 		if (!i->getLife())
 		{
-			std::swap(*i, *(exploVec.end() - 1));
+			std::iter_swap(i, exploVec.end() -1);
 			exploVec.erase(exploVec.end() - 1);
 		}
 		else
@@ -409,7 +397,7 @@ void GamePlay::updateAsteroids(float dt)
 
 		if (!i->getLife())
 		{
-			std::swap(*i, *(asteroidVec.end() - 1));
+			std::iter_swap(i, asteroidVec.end() -1);
 			asteroidVec.erase(asteroidVec.end() - 1);
 		}
 		else
@@ -426,7 +414,7 @@ void GamePlay::updateBullets(float dt)
 
 		if (!i->getLife())
 		{
-			std::swap(*i, *(bulletVec.end() - 1));
+			std::iter_swap(i, bulletVec.end() -1);
 			bulletVec.erase(bulletVec.end() - 1);
 		}
 		else

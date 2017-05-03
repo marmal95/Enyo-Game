@@ -31,22 +31,6 @@ MapGenerator::MapGenerator(const uint32_t& x, const uint32_t& y, const std::stri
 	}
 }
 
-/**
-* Return X size of map
-*/
-inline uint32_t MapGenerator::getX() const
-{
-	return sizeX;
-}
-
-/*
-* Return Y size of map
-*/
-inline uint32_t MapGenerator::getY() const
-{
-	return sizeY;
-}
-
 /*
 * Initializes random generator and generates basic map
 */
@@ -132,7 +116,7 @@ int MapGenerator::countAlive(uint32_t x, uint32_t y) const
 sf::Vector2f MapGenerator::getStartPoint() const
 {
 	bool found = false;
-	uint32_t x, y;
+	uint32_t x{}, y{};
 	while (!found)
 	{
 		x = rand() % sizeX;
@@ -154,11 +138,6 @@ sf::Vector2f MapGenerator::getStartPoint() const
 MapField MapGenerator::getField(const uint32_t& x, const uint32_t& y) const
 {
 	return fields[y*sizeX + x];
-}
-
-void MapGenerator::setField(const uint32_t& x, const uint32_t& y, const MapField& field)
-{
-	fields[static_cast<uint32_t>(y / elementSize)*sizeX + static_cast<uint32_t>(x / elementSize)] = field;
 }
 
 /**

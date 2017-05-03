@@ -16,9 +16,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${SFML_INCLUDE_DIR})
 
 set(HEADER_FILES
-        include/Animation.h include/Application.h include/Asteroid.h include/Bullet.h include/Entity.h
-        include/Explosion.h include/GamePlay.h include/GameStage.h include/Id.h include/MapGenerator.h include/Menu.h
-        include/Player.h include/ResourceHolder.hpp include/Vector.hpp include/Wall.h)
+        include/Animation.h include/Application.h include/Asteroid.h include/Bullet.h include/Constants.h
+        include/Entity.h include/Explosion.h include/GamePlay.h include/GameStage.h include/Id.h include/MapGenerator.h
+        include/Menu.h include/Player.h include/ResourceHolder.hpp include/Vector.hpp include/Wall.h)
 
 set(SOURCE_FILES main.cpp source/Animation.cpp source/Application.cpp source/Asteroid.cpp source/Bullet.cpp
         source/Entity.cpp source/Explosion.cpp source/GamePlay.cpp source/MapGenerator.cpp source/Menu.cpp

@@ -2,9 +2,6 @@
 #include "Asteroid.h"
 #include "GamePlay.h"
 
-#include <cmath>
-#include <iostream>
-
 /**
  * Initializes Asteroid Object
  * @param animation object animation
