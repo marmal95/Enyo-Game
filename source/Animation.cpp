@@ -20,7 +20,7 @@ Animation::Animation()
 Animation::Animation(const sf::Texture& t, const uint32_t& w, const uint32_t& h, const uint32_t& count, const float& speed)
     : frame(0), speed(speed)
 {
-    for(int i = 0; i < count; ++i)
+    for(uint32_t i = 0; i < count; ++i)
         frames.push_back(sf::IntRect(i * w, 0, w, h));
 
     sprite.setTexture(t);
