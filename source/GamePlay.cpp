@@ -119,16 +119,18 @@ void GamePlay::handleUserInput(sf::Keyboard::Key key, bool pressed)
 		case sf::Keyboard::LControl:
 			if (pressed)
 			{
-				auto mPos = playerAircraft->getPosition();
-				auto mOrthPos_x = mPos.x;
-				auto mOrthPos_y = -(mPos.x * mPos.x) / mPos.y;
-				Vector<float> mOrthVec(mOrthPos_x, mOrthPos_y);
-				mOrthVec.normalize();
+				float x = 30 * cos(playerAircraft->getRotation()* M_PI / 180.F) - 30 * sin(playerAircraft->getRotation()* M_PI / 180.F);
+				float y = 30 * sin(playerAircraft->getRotation()* M_PI / 180.F) + 30 * cos(playerAircraft->getRotation()* M_PI / 180.F);
 
 				bulletVec.emplace_back(mAnimationHolder.getResource(ID::BulletRed),
-					Vector<float>(mPos - 20.f * mOrthVec), playerAircraft->getRotation(), BULLET_RADIUS);
+					Vector<float>(x,y), playerAircraft->getRotation(), BULLET_RADIUS);
+				bulletVec.back().move(playerAircraft->getPosition());
+
+				x = 30 * cos(playerAircraft->getRotation()* M_PI / 180.F) + 30 * sin(playerAircraft->getRotation()* M_PI / 180.F);
+				y = 30 * sin(playerAircraft->getRotation()* M_PI / 180.F) - 30 * cos(playerAircraft->getRotation()* M_PI / 180.F);
 				bulletVec.emplace_back(mAnimationHolder.getResource(ID::BulletRed),
-					Vector<float>(mPos + 20.f * mOrthVec), playerAircraft->getRotation(), BULLET_RADIUS);
+					Vector<float>(x,y), playerAircraft->getRotation(), BULLET_RADIUS);
+				bulletVec.back().move(playerAircraft->getPosition());
 
 				qSounds.emplace_back(mSoundHolder.getResource(ID::BulletRedSound));
 				qSounds.back().play();
