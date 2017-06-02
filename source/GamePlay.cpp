@@ -49,7 +49,19 @@ bool GamePlay::update(float dt)
 {
 	checkPlayerMove();
 	checkCollisions();
-	updateEntities(dt);
+	//updateEntities(dt);
+	playerAircraft->update(dt);
+	playerAircraft->getAnimation().update();
+
+	updateEntities(wallVec, dt);
+	updateEntities(exploVec, dt);
+	updateEntities(asteroidVec, dt);
+	updateEntities(bulletVec, dt);
+
+	removeEntities(exploVec, [](auto& p) {return p.getAnimation().finished(); });
+	removeEntities(asteroidVec, [](auto& p) {return !p.getLife(); });
+	removeEntities(bulletVec, [](auto& p) {return !p.getLife(); });
+
 	checkRandomAsteroid();
 
 	checkSounds();
@@ -332,20 +344,6 @@ void GamePlay::checkCollisions()
 }
 
 /**
- * Updates Entities and their animation. Remove them if not alive.
- */
-void GamePlay::updateEntities(float dt)
-{
-	playerAircraft->update(dt);
-	playerAircraft->getAnimation().update();
-
-	updateWalls(dt);
-	updateExplosions(dt);
-	updateAsteroids(dt);
-	updateBullets(dt);
-}
-
-/**
  * Checks Game sounds. If stopped playing - remove them.
  */
 void GamePlay::checkSounds()
@@ -353,76 +351,23 @@ void GamePlay::checkSounds()
 	qSounds.remove_if([](auto& snd) {return snd.getStatus() == sf::Sound::Stopped; });
 }
 
-void GamePlay::updateWalls(float dt)
+template<typename T>
+inline void GamePlay::updateEntities(std::vector<T>& entities, float dt)
 {
-	for (auto i = wallVec.begin(); i != wallVec.end();)
+	for (auto& p : entities)
 	{
-		i->update(dt);
-		i->getAnimation().update();
-
-		if (!i->getLife())
-		{
-			std::iter_swap(i, wallVec.end() -1);
-			wallVec.erase(wallVec.end() - 1);
-		}
-		else
-			++i;
+		p.update(dt);
+		p.getAnimation().update();
 	}
 }
 
-void GamePlay::updateExplosions(float dt)
+template<typename T, typename F>
+void GamePlay::removeEntities(std::vector<T>& entities, F& remove_lam)
 {
-	for (auto i = exploVec.begin(); i != exploVec.end();)
-	{
-		i->update(dt);
-		i->getAnimation().update();
-
-		if (i->getAnimation().finished())
-			i->setLife(false);
-
-		if (!i->getLife())
-		{
-			std::iter_swap(i, exploVec.end() -1);
-			exploVec.erase(exploVec.end() - 1);
-		}
-		else
-			++i;
-	}
+	for(auto& p : entities)
+		entities.erase(std::remove_if(entities.begin(), entities.end(), remove_lam), entities.end());
 }
 
-void GamePlay::updateAsteroids(float dt)
-{
-	for (auto i = asteroidVec.begin(); i != asteroidVec.end();)
-	{
-		i->update(dt);
-		i->getAnimation().update();
-
-		if (!i->getLife())
-		{
-			std::iter_swap(i, asteroidVec.end() -1);
-			asteroidVec.erase(asteroidVec.end() - 1);
-		}
-		else
-			++i;
-	}
-}
-
-void GamePlay::updateBullets(float dt)
-{
-	for (auto i = bulletVec.begin(); i != bulletVec.end();)
-	{
-		i->update(dt);
-		i->getAnimation().update();
-
-		if (!i->getLife())
-		{
-			std::iter_swap(i, bulletVec.end() -1);
-			bulletVec.erase(bulletVec.end() - 1);
-		}
-		else
-			++i;
-	}
-}
 
 void GamePlay::updateText()
 {

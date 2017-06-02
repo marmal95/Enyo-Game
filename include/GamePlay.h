@@ -89,11 +89,12 @@ private:
 	void checkSounds();
 
 	// Update Entities
-	void updateEntities(float dt);
-	void updateWalls(float dt);
-	void updateExplosions(float dt);
-	void updateAsteroids(float dt);
-	void updateBullets(float dt);
+	template<typename T>
+	void updateEntities(std::vector<T>& entities, float dt);
+
+	// Remove Entities
+	template<typename T, typename F>
+	void removeEntities(std::vector<T>& entities, F& remove_lam);
 
 	// Check / React collisions
 	bool isCollide(const Entity& a, const Entity& b);
