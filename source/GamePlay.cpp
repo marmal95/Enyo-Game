@@ -364,8 +364,7 @@ inline void GamePlay::updateEntities(std::vector<T>& entities, float dt)
 template<typename T, typename F>
 void GamePlay::removeEntities(std::vector<T>& entities, F& remove_lam)
 {
-	for(auto& p : entities)
-		entities.erase(std::remove_if(entities.begin(), entities.end(), remove_lam), entities.end());
+	entities.erase(std::remove_if(entities.begin(), entities.end(), remove_lam), entities.end());
 }
 
 
