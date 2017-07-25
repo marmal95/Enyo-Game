@@ -1,29 +1,53 @@
 cmake_minimum_required(VERSION 3.7)
+
+# Solution Name
 project(Enyo_Game)
 
+# C++ Version
 set(CMAKE_CXX_STANDARD 14)
-set(SFML_ROOT "D:/Development/SFML-2.4.2-gcc")
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")
 
+# Set CMake modules path
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+
+# Turn on the ability to create folders to organize projects (.vcproj)
+# It creates "CMakePredefinedTargets" folder by default and adds CMake
+# defined projects like INSTALL.vcproj and ZERO_CHECK.vcproj
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# Set SFML root path
+set(SFML_ROOT "")
+
+# Set SFML Path
+if(NOT SFML_ROOT)
+    SET(SFML_ROOT "" CACHE STRING "Path to SFML root.")
+endif()
+
+# Set the output folder where your program will be created
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
 # Find SFML
 find_package(SFML 2 REQUIRED audio graphics network system window)
-if(NOT SFML_FOUND)
-    message(FATAL_ERROR "SFML couldn't be located!")
+if(SFML_FOUND)
+    include_directories(${SFML_INCLUDE_DIR})
+else(NOT SFML_FOUND)
+    SET(SFML_ROOT "" CACHE STRING "Path to SFML root.")
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${SFML_INCLUDE_DIR})
 
-set(HEADER_FILES
-        include/Animation.h include/Application.h include/Asteroid.h include/Bullet.h include/Constants.h
-        include/Entity.h include/Explosion.h include/GamePlay.h include/GameStage.h include/Id.h include/MapGenerator.h
-        include/Menu.h include/Player.h include/ResourceHolder.hpp include/Vector.hpp include/Wall.h)
+# Add files
+file(GLOB_RECURSE HEADERS "include/*.h" "include/*.hpp")
+file(GLOB_RECURSE SOURCES "source/*.cpp")
 
-set(SOURCE_FILES main.cpp source/Animation.cpp source/Application.cpp source/Asteroid.cpp source/Bullet.cpp
-        source/Entity.cpp source/Explosion.cpp source/GamePlay.cpp source/MapGenerator.cpp source/Menu.cpp
-        source/Player.cpp source/Wall.cpp)
+# Create named folders for the sources within the .vcproj
+# Empty name lists them directly under the .vcproj
+source_group("include" FILES ${HEADERS})
+source_group("source" FILES ${SOURCES})
 
-add_executable(Enyo_Game ${HEADER_FILES} ${SOURCE_FILES})
+# Create .exe
+add_executable(Enyo_Game ${HEADERS} ${SOURCES})
 
+# Link libraries
 target_link_libraries(Enyo_Game ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
