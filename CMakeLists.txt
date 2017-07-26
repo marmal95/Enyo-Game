@@ -15,7 +15,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Set SFML root path
-set(SFML_ROOT "")
+# set(SFML_ROOT "")
 
 # Set SFML Path
 if(NOT SFML_ROOT)
@@ -31,10 +31,9 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 find_package(SFML 2 REQUIRED audio graphics network system window)
 if(SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
-else(NOT SFML_FOUND)
-    SET(SFML_ROOT "" CACHE STRING "Path to SFML root.")
 endif()
 
+# Additional include directiories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Add files
